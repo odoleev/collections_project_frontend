@@ -52,6 +52,7 @@ export function CreateCollection() {
       </Box>
       <Box display="flex" flexDirection="column" gap="15px">
         <StyledInput
+          value={name}
           onChange={(event) => setName(event.target.value)}
           label="Collection name"
           type="text"
