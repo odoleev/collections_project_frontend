@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IAuthApi, ILogin, IRegistration } from '../../types';
+import { MethodEnum } from '../../helpers/enum';
 
 export const authAPI = createApi({
   reducerPath: 'authAPI',
@@ -10,14 +11,14 @@ export const authAPI = createApi({
     login: build.mutation<IAuthApi, ILogin>({
       query: (body: ILogin) => ({
         url: `/login`,
-        method: 'POST',
+        method: MethodEnum.POST,
         body,
       }),
     }),
     registration: build.mutation<string, IRegistration>({
       query: (body: IRegistration) => ({
         url: `/registration`,
-        method: 'POST',
+        method: MethodEnum.POST,
         body,
         responseHandler: (response) => response.text(),
       }),
@@ -25,14 +26,14 @@ export const authAPI = createApi({
     logout: build.mutation<null, string>({
       query: (token: string) => ({
         url: `/logout`,
-        method: 'POST',
+        method: MethodEnum.POST,
         headers: { Authorization: `Bearer ${token}` },
       }),
     }),
     refreshToken: build.mutation<null, string>({
       query: (token: string) => ({
         url: `/refresh`,
-        method: 'POST',
+        method: MethodEnum.POST,
         headers: { Authorization: `Bearer ${token}` },
       }),
     }),

@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from '../store';
 import { IGetQueries, IUsers, IUsersFromApi } from '../../types';
+import { MethodEnum } from '../../helpers/enum';
 
 export const usersAPI = createApi({
   reducerPath: 'usersAPI',
@@ -30,38 +31,43 @@ export const usersAPI = createApi({
       }),
       providesTags: (result) => ['Users'],
     }),
+    getUser: build.query<IUsers, string>({
+      query: (id: string) => ({
+        url: `${id}`,
+      }),
+    }),
     makeRoleUser: build.mutation<IUsers, string>({
       query: (id: string) => ({
         url: `/role-user/${id}`,
-        method: 'PATCH',
+        method: MethodEnum.PATCH,
       }),
       invalidatesTags: ['Users'],
     }),
     makeRoleAdmin: build.mutation<IUsers, string>({
       query: (id: string) => ({
         url: `/role-admin/${id}`,
-        method: 'PATCH',
+        method: MethodEnum.PATCH,
       }),
       invalidatesTags: ['Users'],
     }),
     blockUser: build.mutation<IUsers, string>({
       query: (id: string) => ({
         url: `/block/${id}`,
-        method: 'PATCH',
+        method: MethodEnum.PATCH,
       }),
       invalidatesTags: ['Users'],
     }),
     unblockUser: build.mutation<IUsers, string>({
       query: (id: string) => ({
         url: `/unblock/${id}`,
-        method: 'PATCH',
+        method: MethodEnum.PATCH,
       }),
       invalidatesTags: ['Users'],
     }),
     deleteUser: build.mutation<IUsers, string>({
       query: (id: string) => ({
         url: `/${id}`,
-        method: 'DELETE',
+        method: MethodEnum.DELETE,
       }),
       invalidatesTags: ['Users'],
     }),

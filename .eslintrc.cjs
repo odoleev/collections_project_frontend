@@ -25,6 +25,7 @@ module.exports = {
         "prettier",
     ],
     "rules": {
+        "no-nested-ternary": 0,
         "no-underscore-dangle": 0,
         "react/jsx-props-no-spreading": 0,
         "@typescript-eslint/ban-ts-comment": 0,

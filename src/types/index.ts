@@ -5,3 +5,4 @@ export * from './users';
 export * from './queriesTypes';
 export * from './formField';
 export * from './alert';
+export * from './collections';

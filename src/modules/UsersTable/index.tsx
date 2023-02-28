@@ -93,7 +93,7 @@ export function UsersTable() {
     };
   });
 
-  return data && !isUserError ? (
+  return usersData && !isUserError ? (
     <MaterialReactTable
       enableRowActions
       enableFullScreenToggle={false}
@@ -107,7 +107,7 @@ export function UsersTable() {
       onSortingChange={setSorting}
       rowCount={usersData ? usersData.totalCount : undefined}
       columns={columns}
-      data={data}
+      data={data ?? []}
       renderRowActions={({ row }) => <TableActions row={row} />}
       renderTopToolbarCustomActions={() => (
         <Tooltip arrow title="Refresh Data">

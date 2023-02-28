@@ -4,3 +4,7 @@ export interface IGetQueries {
   sort: [string, number] | [];
   search: string;
 }
+
+export interface IQueriesAndId extends IGetQueries {
+  id: string;
+}

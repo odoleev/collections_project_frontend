@@ -10,6 +10,10 @@ import { PersonalAccount } from './PersonalAccount';
 import { useAppDispatch } from '../store/hooks/redux';
 import { setUser } from '../store/reducers';
 import { Registration } from './Registration';
+import { Collection } from './Collection';
+import { ItemPage } from './Item';
+import { Search } from './Search';
+import {CreateCollection} from "./CreateCollection";
 
 export function Routing() {
   const dispatch = useAppDispatch();
@@ -50,10 +54,55 @@ export function Routing() {
         />
 
         <Route
-          path="personal-account"
+          path="personal-account/:id"
+          element={
+            <PublicElement>
+              <PersonalAccount />
+            </PublicElement>
+          }
+        />
+
+        <Route
+          path="collection/:id"
+          element={
+            <PublicElement>
+              <Collection />
+            </PublicElement>
+          }
+        />
+
+        <Route
+          path="item/:id"
+          element={
+            <PublicElement>
+              <ItemPage />
+            </PublicElement>
+          }
+        />
+
+        <Route
+          path="Search"
+          element={
+            <PublicElement>
+              <Search />
+            </PublicElement>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <PublicElement>
+              <NotFound />
+            </PublicElement>
+          }
+        />
+
+        <Route
+          path="create-collection/:id"
           element={
             <UserElement>
-              <PersonalAccount />
+              <CreateCollection />
             </UserElement>
           }
         />
@@ -64,14 +113,6 @@ export function Routing() {
             <AdminElement>
               <Users />
             </AdminElement>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <PublicElement>
-              <NotFound />
-            </PublicElement>
           }
         />
       </Route>

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { authAPI } from '../../store/services';
-import { setUser } from '../../store/reducers';
+import { setUser, setAlert } from '../../store/reducers';
 import { loginSchema } from '../../helpers/schemas';
 import { IFormField } from '../../types';
 import { AuthForm } from '../../components';
-import { setAlert } from '../../store/reducers/alertSlice';
 
 interface FormInputs {
   email: string;
@@ -65,12 +64,13 @@ export function LoginForm() {
           accessToken: loginData.tokens.accessToken,
           refreshToken: loginData.tokens.refreshToken,
           banStatus: loginData.banStatus,
-          id: loginData.id
+          id: loginData.id,
         })
       );
       navigate('/personal-account');
     }
   }, [isLoginSuccess]);
+
   return (
     <Box
       component="section"

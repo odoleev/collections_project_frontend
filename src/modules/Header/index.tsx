@@ -5,18 +5,18 @@ import { RolesEnum, IPageLink } from '../../types';
 import { BurgerMenu, HeaderButtons, HeaderMenu } from '../../components';
 
 export function Header() {
-  const { username, role } = useAppSelector((state) => state.authReducer);
+  const { username, role, id } = useAppSelector((state) => state.authReducer);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
   const AuthPages: IPageLink[] = [
     { name: 'Main', link: '/' },
-    { name: `${username} Collections`, link: '/personal-account' },
+    { name: `${username} Collections`, link: `/personal-account/${id}` },
   ];
   const AdminPages: IPageLink[] = [
     { name: 'Main', link: '/' },
-    { name: `${username} Collections`, link: '/personal-account' },
+    { name: `${username} Collections`, link: `/personal-account/${id}` },
     { name: 'Users', link: '/users' },
   ];
 
