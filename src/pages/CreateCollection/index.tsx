@@ -16,9 +16,7 @@ export function CreateCollection() {
     collectionsAPI.useCreateCollectionMutation();
 
   const [name, setName] = useState<string>('');
-  const [theme, setTheme] = useState<CollectionThemesEnum>(
-    CollectionThemesEnum.OTHER
-  );
+  const [theme, setTheme] = useState<string>(CollectionThemesEnum.OTHER);
   const [description, setDescription] = useState<string>('');
   const [string1descr, setString1Descr] = useState<string | null>(null);
   const [string2descr, setString2Descr] = useState<string | null>(null);
