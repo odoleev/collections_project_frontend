@@ -7,7 +7,6 @@ import {
   Done,
   Person,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import { RolesEnum } from '../../types';
 import { authAPI, usersAPI } from '../../store/services';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
@@ -47,50 +46,65 @@ export function TableActions({ row }: { row: any }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: '1rem' }}>
+    <Box sx={{ display: 'flex' }}>
       <Tooltip arrow placement="top" title="Block">
-        <IconButton
-          disabled={row.original.banStatus === 'true'}
-          color="error"
-          onClick={() => handleBlock(row.original.id)}
-        >
-          <Block />
-        </IconButton>
+        <span>
+          <IconButton
+            disabled={row.original.banStatus === 'true'}
+            color="error"
+            onClick={() => handleBlock(row.original.id)}
+          >
+            <Block />
+          </IconButton>
+        </span>
       </Tooltip>
+
       <Tooltip arrow placement="top" title="Unblock">
-        <IconButton
-          disabled={row.original.banStatus === 'false'}
-          color="success"
-          onClick={() => unblockUser(row.original.id)}
-        >
-          <Done />
-        </IconButton>
+        <span>
+          <IconButton
+            disabled={row.original.banStatus === 'false'}
+            color="success"
+            onClick={() => unblockUser(row.original.id)}
+          >
+            <Done />
+          </IconButton>{' '}
+        </span>
       </Tooltip>
+
       <Tooltip arrow placement="top" title="Make admin">
-        <IconButton
-          disabled={row.original.roles === RolesEnum.ADMIN}
-          color="primary"
-          onClick={() => makeRoleAdmin(row.original.id)}
-        >
-          <AdminPanelSettings />
-        </IconButton>
+        <span>
+          {' '}
+          <IconButton
+            disabled={row.original.roles === RolesEnum.ADMIN}
+            color="primary"
+            onClick={() => makeRoleAdmin(row.original.id)}
+          >
+            <AdminPanelSettings />
+          </IconButton>
+        </span>
       </Tooltip>
+
       <Tooltip arrow placement="top" title="Make user">
-        <IconButton
-          disabled={row.original.roles === RolesEnum.USER}
-          color="secondary"
-          onClick={() => handleRoleUser(row.original.id)}
-        >
-          <Person />
-        </IconButton>
+        <span>
+          <IconButton
+            disabled={row.original.roles === RolesEnum.USER}
+            color="secondary"
+            onClick={() => handleRoleUser(row.original.id)}
+          >
+            <Person />
+          </IconButton>
+        </span>
       </Tooltip>
+
       <Tooltip arrow placement="top" title="Delete">
-        <IconButton
-          color="error"
-          onClick={() => handleDeleteUser(row.original.id)}
-        >
-          <Delete />
-        </IconButton>
+        <span>
+          <IconButton
+            color="error"
+            onClick={() => handleDeleteUser(row.original.id)}
+          >
+            <Delete />
+          </IconButton>
+        </span>
       </Tooltip>
     </Box>
   );

@@ -4,21 +4,21 @@ import { useAppSelector } from '../../store/hooks/redux';
 import { RolesEnum, IPageLink } from '../../types';
 import { BurgerMenu, HeaderButtons, HeaderMenu } from '../../components';
 
-const AuthPages: IPageLink[] = [
-  { name: 'Main', link: '/' },
-  { name: 'My Collections', link: '/personal-account' },
-];
-const AdminPages: IPageLink[] = [
-  { name: 'Main', link: '/' },
-  { name: 'My Collections', link: '/personal-account' },
-  { name: 'Users', link: '/users' },
-];
-
 export function Header() {
   const { username, role } = useAppSelector((state) => state.authReducer);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+
+  const AuthPages: IPageLink[] = [
+    { name: 'Main', link: '/' },
+    { name: `${username} Collections`, link: '/personal-account' },
+  ];
+  const AdminPages: IPageLink[] = [
+    { name: 'Main', link: '/' },
+    { name: `${username} Collections`, link: '/personal-account' },
+    { name: 'Users', link: '/users' },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);

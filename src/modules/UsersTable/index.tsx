@@ -1,18 +1,29 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable, {
+  MRT_ColumnDef,
+  MRT_SortingState,
+} from 'material-react-table';
 import { IconButton, Tooltip } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { usersAPI } from '../../store/services';
-import { IUsers } from '../../types';
+import { IUsers, RolesEnum } from '../../types';
 import { TableActions } from '../../components';
 import { useAppDispatch } from '../../store/hooks/redux';
 import { setAlert } from '../../store/reducers';
 import { Loader } from '../../UI';
 
+type Cols = {
+  id: string;
+  email: string;
+  username: string;
+  banStatus: string;
+  roles: RolesEnum;
+};
+
 export function UsersTable() {
   const dispatch = useAppDispatch();
   const [globalFilter, setGlobalFilter] = useState('');
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -47,7 +58,7 @@ export function UsersTable() {
     }
   }, [isUserError]);
 
-  const columns = useMemo(
+  const columns: MRT_ColumnDef<Cols>[] = useMemo(
     () => [
       {
         header: 'Id',
@@ -72,7 +83,7 @@ export function UsersTable() {
     ],
     []
   );
-  const data = usersData?.users.map((user: IUsers) => {
+  const data: Cols[] | undefined = usersData?.users.map((user: IUsers) => {
     return {
       id: user._id,
       email: user.email,
@@ -82,7 +93,7 @@ export function UsersTable() {
     };
   });
 
-  return usersData && !isUserError ? (
+  return data && !isUserError ? (
     <MaterialReactTable
       enableRowActions
       enableFullScreenToggle={false}
@@ -90,6 +101,7 @@ export function UsersTable() {
       manualFiltering
       manualPagination
       manualSorting
+      enableFilterMatchHighlighting={false}
       onGlobalFilterChange={setGlobalFilter}
       onPaginationChange={setPagination}
       onSortingChange={setSorting}
