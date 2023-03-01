@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
-import { setAlert } from '../../store/reducers/alertSlice';
+import { setAlert } from '../../store/reducers';
 
 export function SnackbarAlert() {
   const { isOpen, text, type } = useAppSelector((state) => state.alertReducer);

@@ -1,5 +1,5 @@
 export interface IGetQueries {
-  limit: number;
+  limit?: number;
   page: number;
   sort: [string, number] | [];
   search: string;

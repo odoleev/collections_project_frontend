@@ -25,11 +25,11 @@ export interface ICollection {
   text3descr: string | null;
 }
 
-export interface ICreateCollection {
+interface IEditCollectionBody {
   name: string;
   description: string;
   theme: CollectionThemesEnum;
-  creatorId: string;
+
   imgUrl: string | null;
   boolean1descr: string | null;
   boolean2descr: string | null;
@@ -48,9 +48,14 @@ export interface ICreateCollection {
   text3descr: string | null;
 }
 
+export interface ICreateCollection extends IEditCollectionBody{
+  creatorId: string;
+}
+
 export interface IEditCollection {
-  body: ICreateCollection;
+  body: IEditCollectionBody;
   id: string;
+  token: string;
 }
 
 export interface IApiCollections {

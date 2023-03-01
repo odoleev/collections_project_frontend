@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import React from 'react';
+import { ItemLayout } from '../../modules';
 
 export function ItemPage() {
-  const navigate = useNavigate();
-  return <div>Item</div>;
+  const { id } = useParams<string>();
+
+  return id ? <ItemLayout itemId={id} /> : null;
 }

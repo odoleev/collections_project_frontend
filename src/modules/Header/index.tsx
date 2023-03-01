@@ -1,21 +1,21 @@
 import React from 'react';
-import { AppBar, Container, Toolbar } from '@mui/material';
+import { AppBar, Button, Container, Toolbar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks/redux';
 import { RolesEnum, IPageLink } from '../../types';
 import { BurgerMenu, HeaderButtons, HeaderMenu } from '../../components';
 
 export function Header() {
+  const navigate = useNavigate();
   const { username, role, id } = useAppSelector((state) => state.authReducer);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
   const AuthPages: IPageLink[] = [
-    { name: 'Main', link: '/' },
     { name: `${username} Collections`, link: `/personal-account/${id}` },
   ];
   const AdminPages: IPageLink[] = [
-    { name: 'Main', link: '/' },
     { name: `${username} Collections`, link: `/personal-account/${id}` },
     { name: 'Users', link: '/users' },
   ];
@@ -31,7 +31,20 @@ export function Header() {
   return (
     <AppBar style={{ backgroundColor: 'black' }} position="static">
       <Container>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'end' }} disableGutters>
+        <Toolbar
+          sx={{ display: 'flex', justifyContent: 'space-between' }}
+          disableGutters
+        >
+          {!username && (
+            <Button
+              onClick={() => {
+                navigate('/');
+              }}
+              sx={{ my: 2, color: 'mintcream', display: 'block' }}
+            >
+              Main
+            </Button>
+          )}
           {username && (
             <BurgerMenu
               handleClose={handleCloseNavMenu}

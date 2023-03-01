@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
+import { useAppDispatch } from '../../store/hooks/redux';
 import { authAPI } from '../../store/services';
 import { setUser, setAlert } from '../../store/reducers';
 import { loginSchema } from '../../helpers/schemas';
 import { IFormField } from '../../types';
 import { AuthForm } from '../../components';
+import { PageContainer } from '../../UI';
 
 interface FormInputs {
   email: string;
@@ -72,21 +73,23 @@ export function LoginForm() {
   }, [isLoginSuccess]);
 
   return (
-    <Box
-      component="section"
-      justifyContent="center"
-      alignItems="center"
-      display="flex"
-    >
-      <AuthForm
-        buttonText="Sign in"
-        fields={loginFormFields}
-        schema={loginSchema}
-        error={loginError}
-        isError={isLoginError}
-        isLoading={isLoginLoading}
-        onSubmit={handleLogin}
-      />
-    </Box>
+    <PageContainer>
+      <Box
+        component="section"
+        justifyContent="center"
+        alignItems="center"
+        display="flex"
+      >
+        <AuthForm
+          buttonText="Sign in"
+          fields={loginFormFields}
+          schema={loginSchema}
+          error={loginError}
+          isError={isLoginError}
+          isLoading={isLoginLoading}
+          onSubmit={handleLogin}
+        />
+      </Box>
+    </PageContainer>
   );
 }

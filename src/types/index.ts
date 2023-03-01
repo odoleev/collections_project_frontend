@@ -6,3 +6,4 @@ export * from './queriesTypes';
 export * from './formField';
 export * from './alert';
 export * from './collections';
+export * from './sortOptions';

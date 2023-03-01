@@ -13,7 +13,8 @@ import { Registration } from './Registration';
 import { Collection } from './Collection';
 import { ItemPage } from './Item';
 import { Search } from './Search';
-import {CreateCollection} from "./CreateCollection";
+import { CreateCollection } from './CreateCollection';
+import { CreateItem } from './CreateItem';
 
 export function Routing() {
   const dispatch = useAppDispatch();
@@ -103,6 +104,15 @@ export function Routing() {
           element={
             <UserElement>
               <CreateCollection />
+            </UserElement>
+          }
+        />
+
+        <Route
+          path="create-item/:id"
+          element={
+            <UserElement>
+              <CreateItem />
             </UserElement>
           }
         />

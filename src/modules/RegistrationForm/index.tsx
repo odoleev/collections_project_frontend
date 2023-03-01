@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { authAPI } from '../../store/services';
-import { setAlert } from '../../store/reducers/alertSlice';
+import { setAlert } from '../../store/reducers';
 import { IFormField } from '../../types';
 import { registrationSchema } from '../../helpers/schemas';
 import { AuthForm } from '../../components';
+import { PageContainer } from '../../UI';
 
 interface FormInputs {
   email: string;
@@ -64,21 +65,23 @@ export function RegistrationForm() {
     }
   }, [isRegistrationSuccess]);
   return (
-    <Box
-      component="section"
-      justifyContent="center"
-      alignItems="center"
-      display="flex"
-    >
-      <AuthForm
-        buttonText="Sign up"
-        onSubmit={handleRegistration}
-        isLoading={isRegistrationLoading}
-        isError={isRegistrationError}
-        error={registrationError}
-        schema={registrationSchema}
-        fields={registrationFormFields}
-      />
-    </Box>
+    <PageContainer>
+      <Box
+        component="section"
+        justifyContent="center"
+        alignItems="center"
+        display="flex"
+      >
+        <AuthForm
+          buttonText="Sign up"
+          onSubmit={handleRegistration}
+          isLoading={isRegistrationLoading}
+          isError={isRegistrationError}
+          error={registrationError}
+          schema={registrationSchema}
+          fields={registrationFormFields}
+        />
+      </Box>
+    </PageContainer>
   );
 }

@@ -1,5 +1,12 @@
 import React from 'react';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { IBurgerMenu } from './burger-menu.types';
@@ -46,6 +53,14 @@ export function BurgerMenu({
           display: { xs: 'block', md: 'none' },
         }}
       >
+        <MenuItem
+          onClick={() => {
+            navigate('/');
+            handleClose();
+          }}
+        >
+          Main
+        </MenuItem>
         {options.map((option) => (
           <MenuItem
             key={option.name}

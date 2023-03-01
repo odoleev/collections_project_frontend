@@ -8,6 +8,15 @@ export function HeaderMenu({ options, handleClose }: IHeaderMenu) {
 
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+      <Button
+        onClick={() => {
+          navigate('/');
+          handleClose();
+        }}
+        sx={{ my: 2, color: 'mintcream', display: 'block' }}
+      >
+        Main
+      </Button>
       {options.map((page) => (
         <Button
           key={page.name}

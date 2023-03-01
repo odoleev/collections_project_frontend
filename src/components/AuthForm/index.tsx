@@ -3,9 +3,9 @@ import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { ValidationMessage } from '../../UI';
 import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
 import { IForm } from './form.types';
+import {ValidationMessage} from "../ValidationMessage";
 
 export function AuthForm({
   buttonText,

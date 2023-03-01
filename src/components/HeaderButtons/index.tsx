@@ -37,6 +37,7 @@ export function HeaderButtons() {
   useEffect(() => {
     if (isLogoutSuccess) {
       dispatch(logoutUser());
+      navigate('/');
     }
   }, [isLogoutSuccess]);
   return (
