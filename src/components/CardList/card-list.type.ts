@@ -1,5 +1,4 @@
-import { IApiCollections } from '../../types';
-import { IApiItems } from '../../types/items';
+import { IApiCollections, IApiItems } from '../../types';
 
 export interface ICollectionCardList {
   data: IApiCollections;

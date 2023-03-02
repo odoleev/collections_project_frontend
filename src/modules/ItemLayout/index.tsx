@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
+import {Box, Button, Divider} from '@mui/material';
 import { IItemLayout } from './item-layout.types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { itemsAPI } from '../../store/services/ItemsServices';
@@ -8,13 +8,12 @@ import { collectionsAPI } from '../../store/services';
 import { Loader, PageContainer } from '../../UI';
 import { IncorrectID } from '../../components';
 import { CreateEditItemForm } from '../CreateEditItemForm';
-import { ItemsDescription } from '../CreateItemLayout/ItemDescription';
+import { ItemsDescription } from './ItemDescription';
+import { Comments } from '../Comments';
 
 export function ItemLayout({ itemId }: IItemLayout) {
   const navigate = useNavigate();
-  const { id, accessToken, role } = useAppSelector(
-    (state) => state.authReducer
-  );
+  const { id, accessToken } = useAppSelector((state) => state.authReducer);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
@@ -123,7 +122,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
   };
 
   useEffect(() => {
-    if (isItemSuccess) {
+    if (isItemSuccess && itemData) {
       setName(itemData.name);
       setTags(itemData.tags);
       setString1(itemData.string1);
@@ -163,83 +162,91 @@ export function ItemLayout({ itemId }: IItemLayout) {
   ) : (
     <PageContainer>
       {!isItemLoading ? (
-        isItemSuccess &&
-        isCollSuccess &&
-        (isEdit ? (
-          <Box display="flex" flexDirection="column" gap="50px">
-            <CreateEditItemForm
-              isEdit
-              handleCancel={handleCancel}
-              name={name}
-              setName={setName}
-              tags={tags}
-              setTags={setTags}
-              string1={string1}
-              setString1={setString1}
-              string2={string2}
-              setString2={setString2}
-              string3={string3}
-              setString3={setString3}
-              number1={number1}
-              setNumber1={setNumber1}
-              number2={number2}
-              setNumber2={setNumber2}
-              number3={number3}
-              setNumber3={setNumber3}
-              text1={text1}
-              setText1={setText1}
-              text2={text2}
-              setText2={setText2}
-              text3={text3}
-              setText3={setText3}
-              date1={date1}
-              setDate1={setDate1}
-              date2={date2}
-              setDate2={setDate2}
-              date3={date3}
-              setDate3={setDate3}
-              boolean1={boolean1}
-              setBoolean1={setBoolean1}
-              boolean2={boolean2}
-              setBoolean2={setBoolean2}
-              boolean3={boolean3}
-              setBoolean3={setBoolean3}
-              string1descr={collectionData.string1descr}
-              string2descr={collectionData.string2descr}
-              string3descr={collectionData.string3descr}
-              number1descr={collectionData.number1descr}
-              number2descr={collectionData.number2descr}
-              number3descr={collectionData.number3descr}
-              text1descr={collectionData.text1descr}
-              text2descr={collectionData.text2descr}
-              text3descr={collectionData.text3descr}
-              date1descr={collectionData.date1descr}
-              date2descr={collectionData.date2descr}
-              date3descr={collectionData.date3descr}
-              boolean1descr={collectionData.boolean1descr}
-              boolean2descr={collectionData.boolean2descr}
-              boolean3descr={collectionData.boolean3descr}
-            />
-            <Box minWidth="280px" display="flex" justifyContent="center">
-              <Button onClick={handleEdit} variant="contained">
-                {isEditLoading ? <Loader /> : 'Edit Item'}
-              </Button>
+        isItemSuccess && isCollSuccess && collectionData ? (
+          isEdit ? (
+            <Box display="flex" flexDirection="column" gap="50px">
+              <CreateEditItemForm
+                isEdit
+                handleCancel={handleCancel}
+                name={name}
+                setName={setName}
+                tags={tags}
+                setTags={setTags}
+                string1={string1}
+                setString1={setString1}
+                string2={string2}
+                setString2={setString2}
+                string3={string3}
+                setString3={setString3}
+                number1={number1}
+                setNumber1={setNumber1}
+                number2={number2}
+                setNumber2={setNumber2}
+                number3={number3}
+                setNumber3={setNumber3}
+                text1={text1}
+                setText1={setText1}
+                text2={text2}
+                setText2={setText2}
+                text3={text3}
+                setText3={setText3}
+                date1={date1}
+                setDate1={setDate1}
+                date2={date2}
+                setDate2={setDate2}
+                date3={date3}
+                setDate3={setDate3}
+                boolean1={boolean1}
+                setBoolean1={setBoolean1}
+                boolean2={boolean2}
+                setBoolean2={setBoolean2}
+                boolean3={boolean3}
+                setBoolean3={setBoolean3}
+                string1descr={collectionData.string1descr}
+                string2descr={collectionData.string2descr}
+                string3descr={collectionData.string3descr}
+                number1descr={collectionData.number1descr}
+                number2descr={collectionData.number2descr}
+                number3descr={collectionData.number3descr}
+                text1descr={collectionData.text1descr}
+                text2descr={collectionData.text2descr}
+                text3descr={collectionData.text3descr}
+                date1descr={collectionData.date1descr}
+                date2descr={collectionData.date2descr}
+                date3descr={collectionData.date3descr}
+                boolean1descr={collectionData.boolean1descr}
+                boolean2descr={collectionData.boolean2descr}
+                boolean3descr={collectionData.boolean3descr}
+              />
+              <Box minWidth="280px" display="flex" justifyContent="center">
+                <Button onClick={handleEdit} variant="contained">
+                  {isEditLoading ? <Loader /> : 'Edit Item'}
+                </Button>
+              </Box>
             </Box>
-          </Box>
+          ) : (
+            <Box display="flex" flexDirection="column" gap="30px">
+              <ItemsDescription
+                userId={id || ''}
+                itemData={itemData}
+                collectionData={collectionData}
+                handleEditButton={handleEditButton}
+                handleOpenDelete={handleOpenDelete}
+                deleteOpen={deleteOpen}
+                handleCloseDelete={handleCloseDelete}
+                handleDelete={handleDelete}
+              />
+              <Divider component="div" />
+              {id ? (
+                <Comments itemId={itemId} />
+              ) : (
+                <Box>Login to see comments</Box>
+              )}
+            </Box>
+          )
         ) : (
-          <Box display="flex" flexDirection="column" gap="30px">
-            <ItemsDescription
-              userId={id || ''}
-              itemData={itemData}
-              collectionData={collectionData}
-              handleEditButton={handleEditButton}
-              handleOpenDelete={handleOpenDelete}
-              deleteOpen={deleteOpen}
-              handleCloseDelete={handleCloseDelete}
-              handleDelete={handleDelete}
-            />
-          </Box>
-        ))
+          <IncorrectID>Collection was deleted</IncorrectID>
+        )
       ) : (
         <Loader />
       )}

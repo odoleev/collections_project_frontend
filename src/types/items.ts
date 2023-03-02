@@ -37,5 +37,5 @@ export interface ICreateItem extends IEditItem {
 
 export interface IApiItems {
   items: IItem[];
-  totalCount: number;
+  totalCount: { totalCount: number };
 }

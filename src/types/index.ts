@@ -7,3 +7,5 @@ export * from './formField';
 export * from './alert';
 export * from './collections';
 export * from './sortOptions';
+export * from './comments';
+export * from './items';

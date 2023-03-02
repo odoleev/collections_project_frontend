@@ -60,7 +60,7 @@ export interface IEditCollection {
 
 export interface IApiCollections {
   collections: ICollection[];
-  totalCount: number;
+  totalCount: { totalCount: number };
 }
 
 export enum CollectionThemesEnum {

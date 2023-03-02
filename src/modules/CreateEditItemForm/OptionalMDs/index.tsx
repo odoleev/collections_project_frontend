@@ -26,7 +26,7 @@ export function OptionalMDs({
     []
   );
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap="15px">
       {text1descr && (
         <Box display="flex" flexDirection="column" gap="10px">
           <Typography component="h5" fontWeight="700" color="text.secondary">

@@ -9,4 +9,6 @@ export { ValidationMessage } from './ValidationMessage';
 export { IncorrectID } from './IncorrectId';
 export { ImageUploader } from './ImageUploader';
 export { DeleteDialog } from './DeleteDialog';
-export { ItemsCardList, CollectionCardList} from './CardList'
+export { ItemsCardList, CollectionCardList } from './CardList';
+export { CommentCard } from './CommentCard';
+export { SortAndSearch } from './SortAndSearch';

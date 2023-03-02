@@ -14,7 +14,7 @@ export function OptionalDates({
   date1descr,
 }: IOptionalDates) {
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap="15px">
       {date1descr && (
         <Box display="flex" flexDirection="column" gap="10px">
           <Typography component="h5" fontWeight="700" color="text.secondary">

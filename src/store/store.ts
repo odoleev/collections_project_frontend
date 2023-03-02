@@ -1,15 +1,23 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { authReducer, alertReducer } from './reducers';
-import { authAPI, usersAPI, collectionsAPI } from './services';
-import { itemsAPI } from './services/ItemsServices';
+import {authReducer, alertReducer, searchReducer} from './reducers';
+// eslint-disable-next-line import/no-cycle
+import {
+  authAPI,
+  usersAPI,
+  collectionsAPI,
+  commentsAPI,
+  itemsAPI,
+} from './services';
 
 const rootReducer = combineReducers({
   authReducer,
   alertReducer,
+  searchReducer,
   [authAPI.reducerPath]: authAPI.reducer,
   [usersAPI.reducerPath]: usersAPI.reducer,
   [collectionsAPI.reducerPath]: collectionsAPI.reducer,
   [itemsAPI.reducerPath]: itemsAPI.reducer,
+  [commentsAPI.reducerPath]: commentsAPI.reducer,
 });
 
 export const setupStore = () => {
@@ -20,7 +28,8 @@ export const setupStore = () => {
         authAPI.middleware,
         usersAPI.middleware,
         collectionsAPI.middleware,
-        itemsAPI.middleware
+        itemsAPI.middleware,
+        commentsAPI.middleware
       ),
   });
 };

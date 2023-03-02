@@ -1,7 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { MethodEnum } from '../../helpers/enum';
-import { IApiItems, ICreateItem, IEditItem, IItem } from '../../types/items';
 import {
+  IApiItems,
+  ICreateItem,
+  IEditItem,
+  IItem,
   IGetQueries,
   IQueriesAndId,
 } from '../../types';
@@ -56,6 +59,7 @@ export const itemsAPI = createApi({
         body,
         headers: { Authorization: `Bearer ${token}` },
       }),
+      invalidatesTags: ['Items'],
     }),
     findByTags: build.mutation<IApiItems, { body: string[] }>({
       query: ({ body }) => ({

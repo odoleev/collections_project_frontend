@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { PageContainer } from '../../UI';
+import { Loader, PageContainer } from '../../UI';
 import { CollectionCardList, ItemsCardList } from '../../components';
 import { collectionsAPI } from '../../store/services';
 import { itemsAPI } from '../../store/services/ItemsServices';
@@ -30,27 +30,32 @@ export function HomeLayout() {
     }
     getItems();
   }, []);
-  return isCollSuccess && isItemSuccess ? (
-    <PageContainer>
-      <Box display="flex" flexDirection="column" gap="50px">
-        <Box display="flex" flexDirection="column" gap="30px">
-          <Typography fontSize="30px" fontWeight={700} component="h1">
-            Collections with most Items
-          </Typography>
-          <CollectionCardList data={collData} />
-        </Box>
-
-        {itemData ? (
+  return isCollError || isItemError ? (
+    <PageContainer>Something went wrong</PageContainer>
+  ) : isCollLoading && isItemLoading ? (
+    <Loader />
+  ) : (
+    isCollSuccess &&
+    isItemSuccess && (
+      <PageContainer>
+        <Box display="flex" flexDirection="column" gap="50px">
           <Box display="flex" flexDirection="column" gap="30px">
             <Typography fontSize="30px" fontWeight={700} component="h1">
-              Last added items
+              Collections with most Items
             </Typography>
-            <ItemsCardList data={itemData} />
+            <CollectionCardList data={collData} />
           </Box>
-        ) : null}
-      </Box>
-    </PageContainer>
-  ) : (
-    <PageContainer>Something went wrong</PageContainer>
+
+          {itemData ? (
+            <Box display="flex" flexDirection="column" gap="30px">
+              <Typography fontSize="30px" fontWeight={700} component="h1">
+                Last added items
+              </Typography>
+              <ItemsCardList data={itemData} />
+            </Box>
+          ) : null}
+        </Box>
+      </PageContainer>
+    )
   );
 }

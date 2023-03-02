@@ -14,7 +14,7 @@ export function OptionalBooleans({
   boolean1descr,
 }: IOptionalBooleans) {
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap="15px">
       {boolean1descr && (
         <Box display="flex" gap="10px" alignItems="center">
           <Typography component="h5" fontWeight="700" color="text.secondary">

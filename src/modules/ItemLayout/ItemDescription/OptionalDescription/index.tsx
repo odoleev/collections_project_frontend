@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import Markdown from 'markdown-to-jsx';
 import { IOptionalDescription } from './optional-description.types';
-import { InfoContainer } from '../../../../UI';
+import { InfoContainer, MDWrapper } from '../../../../UI';
 
 export function OptionalDescription({
   string1,
@@ -117,28 +117,34 @@ export function OptionalDescription({
       >
         <Grid item xs={2} sm={4} md={4}>
           {text1descr && (
-            <InfoContainer flexDirection="column">
-              <Typography color="text.secondary">{text1descr}:</Typography>
-              <Markdown>{text1 || ''}</Markdown>
-            </InfoContainer>
+            <MDWrapper>
+              <InfoContainer flexDirection="column">
+                <Typography color="text.secondary">{text1descr}:</Typography>
+                <Markdown>{text1 || ''}</Markdown>
+              </InfoContainer>
+            </MDWrapper>
           )}
         </Grid>
 
         <Grid item xs={2} sm={4} md={4}>
           {text2descr && (
-            <InfoContainer flexDirection="column">
-              <Typography color="text.secondary">{text2descr}:</Typography>
-              <Markdown>{text2 || ''}</Markdown>
-            </InfoContainer>
+            <MDWrapper>
+              <InfoContainer flexDirection="column">
+                <Typography color="text.secondary">{text2descr}:</Typography>
+                <Markdown>{text2 || ''}</Markdown>
+              </InfoContainer>
+            </MDWrapper>
           )}
         </Grid>
 
         <Grid item xs={2} sm={4} md={4}>
           {text3descr && (
-            <InfoContainer flexDirection="column">
-              <Typography color="text.secondary">{text3descr}:</Typography>
-              <Markdown>{text3 || ''}</Markdown>
-            </InfoContainer>
+            <MDWrapper>
+              <InfoContainer flexDirection="column">
+                <Typography color="text.secondary">{text3descr}:</Typography>
+                <Markdown>{text3 || ''}</Markdown>
+              </InfoContainer>
+            </MDWrapper>
           )}
         </Grid>
       </Grid>

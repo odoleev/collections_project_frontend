@@ -8,3 +8,6 @@ export * from './StyledImage';
 export * from './InfoContainer';
 export * from './Clickable';
 export * from './Tag';
+export * from './CommentWrapper';
+export * from './CommentInput';
+export * from './MDWrapper';

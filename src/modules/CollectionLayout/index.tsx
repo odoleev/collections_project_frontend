@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ICollectionLayout } from './collection-layout.types';
-import { collectionsAPI } from '../../store/services';
+import { collectionsAPI, itemsAPI } from '../../store/services';
 import { Loader, PageContainer } from '../../UI';
-import { IncorrectID, ItemsCardList } from '../../components';
+import { IncorrectID, ItemsCardList, SortAndSearch } from '../../components';
 import { CreateEditCollectionForm } from '../CreateEditCollectionForm';
 import { CollectionThemesEnum, ISortOptions, RolesEnum } from '../../types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { CollectionDescription } from './CollectionDescription';
-import { SortAndSearch } from '../../components/SortAndSearch';
-import { itemsAPI } from '../../store/services/ItemsServices';
 
 export function CollectionLayout({ collectionId }: ICollectionLayout) {
+  const navigate = useNavigate();
   const { id, accessToken, role } = useAppSelector(
     (state) => state.authReducer
   );
+  const lastElement = useRef();
   const [isEdit, setEdit] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
-
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [sort, setSort] = useState<[string, -1 | 1]>(['createdAt', -1]);
@@ -70,7 +68,6 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
     isLoading: isItemsLoading,
     error: collectionsError,
   } = itemsAPI.useGetCollectionItemsQuery({
-    page: 1,
     search,
     sort,
     id: collectionId,
@@ -163,7 +160,7 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
   };
 
   useEffect(() => {
-    if (isCollSuccess) {
+    if (isCollSuccess && collectionData) {
       setName(collectionData.name);
       setTheme(collectionData.theme);
       setImgUrl(collectionData.imgUrl);
@@ -204,108 +201,111 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
     } else if (isDeleteError) console.log(deleteError);
   }, [isDeleteError, isDeleteSuccess]);
 
-  return isCollError ? (
+  return isCollError || !collectionData ? (
     <PageContainer>
       <IncorrectID>No Collection with such id</IncorrectID>
     </PageContainer>
   ) : (
     <PageContainer>
       {!isCollLoading ? (
-        isCollSuccess &&
-        (isEdit ? (
-          <Box display="flex" flexDirection="column" gap="50px">
-            <CreateEditCollectionForm
-              isEdit
-              handleCancel={handleCancel}
-              name={name}
-              setName={setName}
-              theme={theme}
-              setTheme={setTheme}
-              imgUrl={imgUrl}
-              setImgUrl={setImgUrl}
-              description={description}
-              setDescription={setDescription}
-              string1descr={string1descr}
-              setString1Descr={setString1Descr}
-              string2descr={string2descr}
-              setString2Descr={setString2Descr}
-              string3descr={string3descr}
-              setString3Descr={setString3Descr}
-              number1descr={number1descr}
-              setNumber1Descr={setNumber1Descr}
-              number2descr={number2descr}
-              setNumber2Descr={setNumber2Descr}
-              number3descr={number3descr}
-              setNumber3Descr={setNumber3Descr}
-              text1descr={text1descr}
-              setText1Descr={setText1Descr}
-              text2descr={text2descr}
-              setText2Descr={setText2Descr}
-              text3descr={text3descr}
-              setText3Descr={setText3Descr}
-              date1descr={date1descr}
-              setDate1Descr={setDate1Descr}
-              date2descr={date2descr}
-              setDate2Descr={setDate2Descr}
-              date3descr={date3descr}
-              setDate3Descr={setDate3Descr}
-              boolean1descr={boolean1descr}
-              setBoolean1Descr={setBoolean1Descr}
-              boolean2descr={boolean2descr}
-              setBoolean2Descr={setBoolean2Descr}
-              boolean3descr={boolean3descr}
-              setBoolean3Descr={setBoolean3Descr}
-            />
-            <Box minWidth="280px" display="flex" justifyContent="center">
-              <Button onClick={handleEdit} variant="contained">
-                {isEditLoading ? <Loader /> : 'Edit collection'}
-              </Button>
+        isCollSuccess && collectionData ? (
+          isEdit ? (
+            <Box display="flex" flexDirection="column" gap="50px">
+              <CreateEditCollectionForm
+                isEdit
+                handleCancel={handleCancel}
+                name={name}
+                setName={setName}
+                theme={theme}
+                setTheme={setTheme}
+                imgUrl={imgUrl}
+                setImgUrl={setImgUrl}
+                description={description}
+                setDescription={setDescription}
+                string1descr={string1descr}
+                setString1Descr={setString1Descr}
+                string2descr={string2descr}
+                setString2Descr={setString2Descr}
+                string3descr={string3descr}
+                setString3Descr={setString3Descr}
+                number1descr={number1descr}
+                setNumber1Descr={setNumber1Descr}
+                number2descr={number2descr}
+                setNumber2Descr={setNumber2Descr}
+                number3descr={number3descr}
+                setNumber3Descr={setNumber3Descr}
+                text1descr={text1descr}
+                setText1Descr={setText1Descr}
+                text2descr={text2descr}
+                setText2Descr={setText2Descr}
+                text3descr={text3descr}
+                setText3Descr={setText3Descr}
+                date1descr={date1descr}
+                setDate1Descr={setDate1Descr}
+                date2descr={date2descr}
+                setDate2Descr={setDate2Descr}
+                date3descr={date3descr}
+                setDate3Descr={setDate3Descr}
+                boolean1descr={boolean1descr}
+                setBoolean1Descr={setBoolean1Descr}
+                boolean2descr={boolean2descr}
+                setBoolean2Descr={setBoolean2Descr}
+                boolean3descr={boolean3descr}
+                setBoolean3Descr={setBoolean3Descr}
+              />
+              <Box minWidth="280px" display="flex" justifyContent="center">
+                <Button onClick={handleEdit} variant="contained">
+                  {isEditLoading ? <Loader /> : 'Edit collection'}
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        ) : (
-          <Box display="flex" flexDirection="column" gap="30px">
-            <CollectionDescription
-              collectionData={collectionData}
-              handleEditButton={handleEditButton}
-              handleOpenDelete={handleOpenDelete}
-              deleteOpen={deleteOpen}
-              handleCloseDelete={handleCloseDelete}
-              handleDelete={handleDelete}
-            />
-            <Box>
-              <Box
-                alignItems="start"
-                display="flex"
-                justifyContent="space-between"
-              >
-                <SortAndSearch
-                  setSearch={setSearch}
-                  setSort={setSort}
-                  options={sortOptions}
-                  sort={sort}
-                />
-                {(collectionData.creatorId === id ||
-                  role === RolesEnum.ADMIN) && (
-                  <Button
-                    onClick={handleAddItem}
-                    size="small"
-                    variant="contained"
-                  >
-                    <Typography>Add item</Typography>
-                  </Button>
+          ) : (
+            <Box display="flex" flexDirection="column" gap="30px">
+              <CollectionDescription
+                collectionData={collectionData}
+                handleEditButton={handleEditButton}
+                handleOpenDelete={handleOpenDelete}
+                deleteOpen={deleteOpen}
+                handleCloseDelete={handleCloseDelete}
+                handleDelete={handleDelete}
+              />
+              <Box>
+                <Box
+                  alignItems="start"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <SortAndSearch
+                    setSearch={setSearch}
+                    setSort={setSort}
+                    options={sortOptions}
+                    sort={sort}
+                  />
+                  {(collectionData.creatorId === id ||
+                    role === RolesEnum.ADMIN) && (
+                    <Button
+                      onClick={handleAddItem}
+                      size="small"
+                      variant="contained"
+                    >
+                      <Typography>Add item</Typography>
+                    </Button>
+                  )}
+                </Box>
+
+                {isItemsSuccess ? (
+                  <ItemsCardList data={itemsData} />
+                ) : isItemsLoading ? (
+                  <Loader />
+                ) : (
+                  <Typography>Server Error</Typography>
                 )}
               </Box>
-
-              {isItemsSuccess ? (
-                <ItemsCardList data={itemsData} />
-              ) : isItemsLoading ? (
-                <Loader />
-              ) : (
-                <Typography>Server Error</Typography>
-              )}
             </Box>
-          </Box>
-        ))
+          )
+        ) : (
+          <IncorrectID>No Collection with such id</IncorrectID>
+        )
       ) : (
         <Loader />
       )}

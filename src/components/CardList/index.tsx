@@ -55,7 +55,7 @@ export function CollectionCardList({ data }: ICollectionCardList) {
                   gap="5px"
                 >
                   Theme:
-                  <Typography component="span" fontWeight={700} color="black">
+                  <Typography component="span" fontWeight={700}>
                     {collection.theme}
                   </Typography>
                 </Typography>
@@ -69,8 +69,22 @@ export function CollectionCardList({ data }: ICollectionCardList) {
                   gap="5px"
                 >
                   Created by:
-                  <Typography component="span" fontWeight={700} color="black">
+                  <Typography component="span" fontWeight={700}>
                     {collection.creatorUsername}
+                  </Typography>
+                </Typography>
+                <Typography
+                  gutterBottom
+                  variant="body2"
+                  component="div"
+                  color="text.secondary"
+                  display="flex"
+                  alignItems="center"
+                  gap="5px"
+                >
+                  Items:
+                  <Typography component="span" fontWeight={700}>
+                    {collection.itemsCount}
                   </Typography>
                 </Typography>
               </CardContent>
@@ -141,7 +155,7 @@ export function ItemsCardList({ data }: IItemCardList) {
                     gap="5px"
                   >
                     Collection:
-                    <Typography component="span" fontWeight={700} color="black">
+                    <Typography component="span" fontWeight={700}>
                       {item.collectionName}
                     </Typography>
                   </Typography>
@@ -155,7 +169,7 @@ export function ItemsCardList({ data }: IItemCardList) {
                           : 'disabled'
                       }
                     />
-                    <Typography component="span" fontWeight={500} color="black">
+                    <Typography component="span" fontWeight={500}>
                       {item.likesUsers.length}
                     </Typography>
                   </Box>

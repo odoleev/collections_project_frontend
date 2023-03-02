@@ -15,7 +15,7 @@ export function OptionalNumbers({
   number3descr,
 }: IOptionalNumbers) {
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap="15px">
       {number1descr && (
         <Box display="flex" flexDirection="column" gap="10px">
           <Typography component="h5" fontWeight="700" color="text.secondary">

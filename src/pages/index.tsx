@@ -82,7 +82,7 @@ export function Routing() {
         />
 
         <Route
-          path="Search"
+          path="search"
           element={
             <PublicElement>
               <Search />

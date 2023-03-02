@@ -7,7 +7,7 @@ import { IItemsDescription } from './items-description.types';
 import { BigTag, Clickable, InfoContainer } from '../../../UI';
 import { dateConverter } from '../../../helpers/utils/dateConverter';
 import { OptionalDescription } from './OptionalDescription';
-import { itemsAPI } from '../../../store/services/ItemsServices';
+import { itemsAPI } from '../../../store/services';
 import { useAppSelector } from '../../../store/hooks/redux';
 
 export function ItemsDescription({
@@ -61,7 +61,7 @@ export function ItemsDescription({
           </IconButton>
         </Tooltip>
 
-        <Typography component="span" fontWeight={500} color="black">
+        <Typography component="span" fontWeight={500}>
           {itemData.likesUsers.length}
         </Typography>
       </Box>
