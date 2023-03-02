@@ -18,7 +18,7 @@ import { useAppSelector } from '../../store/hooks/redux';
 
 export function CollectionCardList({ data }: ICollectionCardList) {
   const navigate = useNavigate();
-  return data.totalCount > 0 ? (
+  return data.totalCount.totalCount > 0 ? (
     <Grid
       container
       spacing={{ xs: 2, md: 3 }}
@@ -103,7 +103,7 @@ export function CollectionCardList({ data }: ICollectionCardList) {
 export function ItemsCardList({ data }: IItemCardList) {
   const { id } = useAppSelector((state) => state.authReducer);
   const navigate = useNavigate();
-  return data.totalCount > 0 ? (
+  return data.totalCount.totalCount > 0 ? (
     <Grid
       container
       spacing={{ xs: 2, md: 3 }}

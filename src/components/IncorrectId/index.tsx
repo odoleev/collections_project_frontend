@@ -4,8 +4,10 @@ import { PageContainer } from '../../UI';
 
 export function IncorrectID({ children }: { children: string }) {
   return (
-    <PageContainer fontSize="30px" fontWeight={700} component="h1">
-      <Typography>{children}</Typography>
+    <PageContainer>
+      <Typography component="h1" fontSize="30px" fontWeight={700}>
+        {children}
+      </Typography>
     </PageContainer>
   );
 }
