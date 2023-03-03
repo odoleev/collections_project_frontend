@@ -114,6 +114,8 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
     },
   ] = collectionsAPI.useDeleteCollectionMutation();
 
+  const [deleteItems] = itemsAPI.useDeleteCollectionItemsMutation();
+
   const [name, setName] = useState<string>('');
   const [theme, setTheme] = useState<CollectionThemesEnum>(
     CollectionThemesEnum.OTHER
@@ -169,6 +171,7 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
   const handleDelete = async () => {
     if (accessToken) {
       await deleteCollection({ id: collectionId, token: accessToken });
+      await deleteItems({ id: collectionId, token: accessToken });
     }
   };
 

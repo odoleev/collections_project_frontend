@@ -113,5 +113,13 @@ export const itemsAPI = createApi({
       }),
       invalidatesTags: ['Items'],
     }),
+    deleteCollectionItems: build.mutation<null, { id: string; token: string }>({
+      query: ({ id, token }) => ({
+        url: `delete-items`,
+        method: MethodEnum.POST,
+        body: { id },
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    }),
   }),
 });
