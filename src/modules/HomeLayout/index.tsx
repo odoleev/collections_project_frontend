@@ -7,17 +7,13 @@ import { Loader, PageContainer } from '../../UI';
 import { CollectionCardList, ItemsCardList } from '../../components';
 import { collectionsAPI, itemsAPI } from '../../store/services';
 import { useAppDispatch } from '../../store/hooks/redux';
-import { setAlert, setSearch, setTag } from '../../store/reducers';
+import { setAlert, setTag } from '../../store/reducers';
 
 export function HomeLayout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [tags, setTags] = useState<Array<{ value: string; count: number }>>([]);
-  const handleTagClick = (tag: { value: string; count: number }) => {
-    dispatch(setTag({ tag: tag.value }));
-    navigate('/tags');
-  };
   const {
     data: collData,
     error: collError,
@@ -88,7 +84,6 @@ export function HomeLayout() {
                 </Typography>
                 <TagCloud
                   onClick={(tag: { value: string; count: number }) => {
-                    dispatch(setSearch({ search: '' }));
                     dispatch(setTag({ tag: tag.value }));
                     navigate('/tags');
                   }}

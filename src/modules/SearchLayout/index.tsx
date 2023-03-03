@@ -12,7 +12,7 @@ import { setAlert } from '../../store/reducers';
 export function SearchLayout() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const search = useAppSelector((state) => state.searchReducer.search);
+  const { search } = useAppSelector((state) => state.searchReducer);
   const navigate = useNavigate();
 
   const [sort, setSort] = useState<[string, -1 | 1]>(['createdAt', -1]);
@@ -53,23 +53,24 @@ export function SearchLayout() {
     isError: isSearchError,
     isLoading: isSearchLoading,
     isSuccess: isSearchSuccess,
-    refetch,
   } = itemsAPI.useGetSearchItemsQuery({
     limit: 6,
     page,
     sort,
-    search: { search },
+    search,
   });
 
-  const count = searchData
-    ? Math.ceil(searchData.totalCount.totalCount / 6)
-    : 0;
+  const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
     if (search === '') {
       navigate('/');
     }
-    refetch();
+    // async function forRefetch() {
+    //   await refetch();
+    // }
+    // console.log(searchData)
+    // forRefetch();
   }, [search]);
 
   useEffect(() => {
@@ -85,6 +86,12 @@ export function SearchLayout() {
       }
     }
   }, [isSearchError]);
+
+  useEffect(() => {
+    if (isSearchSuccess) {
+      setCount(Math.ceil(searchData.totalCount.totalCount / 6) || 0);
+    }
+  }, [isSearchSuccess]);
 
   return (
     <PageContainer>

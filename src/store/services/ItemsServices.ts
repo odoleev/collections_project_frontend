@@ -41,7 +41,7 @@ export const itemsAPI = createApi({
         params: {
           limit,
           page,
-          search,
+          search: { search },
           sort,
         },
       }),
