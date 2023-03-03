@@ -79,6 +79,11 @@ export function CreateEditItemForm(props: ICreateEditItems) {
     return { label: tag, value: tag };
   });
 
+  console.log(name)
+
+  const [tagsSelect, setTagsSelect] =
+    useState<MultiValue<{ label: string; value: string }>>(properTags);
+
   const [options, setOptions] = useState<
     Array<{ value: string; label: string }>
   >([]);
@@ -88,12 +93,12 @@ export function CreateEditItemForm(props: ICreateEditItems) {
   const onTagChange = (
     newValue: MultiValue<{ label: string; value: string }>
   ) => {
-    if (properTags.length < 3) {
-      setTags(
-        newValue.map((tag) => {
-          return tag.value as string;
-        })
-      );
+    if (newValue.length < 4) {
+      setTagsSelect(newValue);
+      const valueToTags = tagsSelect.map((tag) => {
+        return tag.value as string;
+      });
+      setTags(valueToTags);
     }
   };
 
@@ -106,7 +111,6 @@ export function CreateEditItemForm(props: ICreateEditItems) {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
       const toOptions = Object.keys(data).map((key) => {
         return { value: key, label: key };
       });
@@ -146,7 +150,7 @@ export function CreateEditItemForm(props: ICreateEditItems) {
           <CreatableSelect
             styles={customStyles}
             options={options}
-            value={properTags}
+            value={tagsSelect}
             isMulti
             onChange={onTagChange}
           />

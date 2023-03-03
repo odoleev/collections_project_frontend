@@ -126,7 +126,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
   };
 
   useEffect(() => {
-    if (isItemSuccess && itemData) {
+    if (isItemSuccess && isItemSuccess) {
       setName(itemData.name);
       setTags(itemData.tags);
       setString1(itemData.string1);
@@ -145,7 +145,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
       setDate2(itemData.date2);
       setDate3(itemData.date3);
     }
-  }, [isCollSuccess]);
+  }, [isItemSuccess]);
 
   useEffect(() => {
     if (isEditSuccess) {
