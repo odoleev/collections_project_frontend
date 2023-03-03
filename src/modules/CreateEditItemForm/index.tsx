@@ -95,7 +95,7 @@ export function CreateEditItemForm(props: ICreateEditItems) {
   ) => {
     if (newValue.length < 4) {
       setTagsSelect(newValue);
-      const valueToTags = tagsSelect.map((tag) => {
+      const valueToTags = newValue.map((tag) => {
         return tag.value as string;
       });
       setTags(valueToTags);
