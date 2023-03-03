@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: { search: string } = {
+const initialState: { search: string; tag: string } = {
   search: '',
+  tag: '',
 };
 
 export const searchSlice = createSlice({
@@ -11,9 +12,12 @@ export const searchSlice = createSlice({
     setSearch: (state, action: PayloadAction<{ search: string }>) => {
       state.search = action.payload.search;
     },
+    setTag: (state, action: PayloadAction<{ tag: string }>) => {
+      state.tag = action.payload.tag;
+    },
   },
 });
 
 export const searchReducer = searchSlice.reducer;
 
-export const { setSearch } = searchSlice.actions;
+export const { setSearch, setTag } = searchSlice.actions;

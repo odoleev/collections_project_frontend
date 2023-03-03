@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import Markdown from 'markdown-to-jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { DeleteDialog, PageHeader } from '../../../components';
 import { Clickable, InfoContainer, StyledCollectionImage } from '../../../UI';
 import { dateConverter } from '../../../helpers/utils/dateConverter';
@@ -15,6 +16,7 @@ export function CollectionDescription({
   handleEditButton,
   collectionData,
 }: ICollectionDescription) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const additionalTitles = [
     { title: collectionData.string1descr, id: 1 },
@@ -38,7 +40,7 @@ export function CollectionDescription({
       <PageHeader
         isDeleteButton
         titleText={collectionData.name}
-        buttonText="Edit"
+        buttonText={t('edit')}
         userId={collectionData.creatorId}
         handleClick={handleEditButton}
         handleOpen={handleOpenDelete}
@@ -51,29 +53,37 @@ export function CollectionDescription({
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 2, sm: 8, md: 12 }}
+        columns={{ xs: 2, sm: 8, md: 8 }}
       >
         <Grid item xs={2} sm={4} md={4}>
           <Box display="flex" flexDirection="column" gap="25px">
             <Box>
               <InfoContainer>
-                <Typography color="text.secondary">Created:</Typography>
+                <Typography color="text.secondary">
+                  {t('collection.created')}
+                </Typography>
                 <Typography fontWeight={600}>
                   {dateConverter(collectionData.createdAt)}
                 </Typography>
               </InfoContainer>
               <InfoContainer>
-                <Typography color="text.secondary">Theme:</Typography>
+                <Typography color="text.secondary">
+                  {t('collection.theme')}
+                </Typography>
                 <Typography fontWeight={600}>{collectionData.theme}</Typography>
               </InfoContainer>
               <InfoContainer>
-                <Typography color="text.secondary">Items:</Typography>
+                <Typography color="text.secondary">
+                  {t('collection.items')}
+                </Typography>
                 <Typography fontWeight={600}>
                   {collectionData.itemsCount}
                 </Typography>
               </InfoContainer>
               <InfoContainer>
-                <Typography color="text.secondary">Author:</Typography>
+                <Typography color="text.secondary">
+                  {t('collection.author')}
+                </Typography>
                 <Clickable
                   onClick={() =>
                     navigate(`/personal-account/${collectionData.creatorId}`)
@@ -97,9 +107,8 @@ export function CollectionDescription({
         <Grid item xs={2} sm={4} md={4}>
           <Box flexDirection="column">
             <Typography color="text.secondary">
-              Additional items options:
+              {t('collection.optional_list')}
             </Typography>
-
             <Box display="flex" flexDirection="column">
               {additionalTitles.map((title) => (
                 <Typography key={title.id} fontWeight={600}>
@@ -111,6 +120,9 @@ export function CollectionDescription({
         </Grid>
       </Grid>
       <Box>
+        <Typography color="text.secondary">
+          {t('collection.description')}
+        </Typography>
         <Markdown>{collectionData.description}</Markdown>
       </Box>
     </Box>

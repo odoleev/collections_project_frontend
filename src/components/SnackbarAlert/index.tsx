@@ -23,7 +23,7 @@ export function SnackbarAlert() {
       anchorOrigin={{ vertical, horizontal }}
       key={vertical + horizontal}
       open={isOpen}
-      autoHideDuration={1000}
+      autoHideDuration={2000}
       onClose={handleClose}
     >
       <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>

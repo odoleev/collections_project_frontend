@@ -8,6 +8,7 @@ import { IFormField } from '../../types';
 import { registrationSchema } from '../../helpers/schemas';
 import { AuthForm } from '../../components';
 import { PageContainer } from '../../UI';
+import {useTranslation} from "react-i18next";
 
 interface FormInputs {
   email: string;
@@ -16,6 +17,7 @@ interface FormInputs {
 }
 
 export function RegistrationForm() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -25,16 +27,16 @@ export function RegistrationForm() {
       type: 'email',
       label: 'Email',
     },
-    { name: 'username', type: 'text', label: 'Username' },
+    { name: 'username', type: 'text', label: `${t('registration.username')}` },
     {
       name: 'password',
       type: 'password',
-      label: 'Password',
+      label: `${t('registration.password')}`,
     },
     {
       name: 'confirmPassword',
       type: 'password',
-      label: 'Confirm Password',
+      label: `${t('registration.confirm')}`,
     },
   ];
 
@@ -57,7 +59,7 @@ export function RegistrationForm() {
       dispatch(
         setAlert({
           isOpen: true,
-          text: 'Successfully signed up!',
+          text: `${t('registration.success')}`,
           type: 'success',
         })
       );
@@ -73,7 +75,7 @@ export function RegistrationForm() {
         display="flex"
       >
         <AuthForm
-          buttonText="Sign up"
+          buttonText={`${t('registration.sign_up')}`}
           onSubmit={handleRegistration}
           isLoading={isRegistrationLoading}
           isError={isRegistrationError}

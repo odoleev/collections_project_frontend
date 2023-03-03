@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Box, FormControl, Typography } from '@mui/material';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { LoadingButton } from '@mui/lab';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { ICommentsLayout } from './comments.types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { commentsAPI } from '../../store/services';
 import { Loader, CommentInput } from '../../UI';
 import { CommentCard } from '../../components';
-import { setAlert } from '../../store/reducers';
+import { logoutUser, setAlert } from '../../store/reducers';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
 
 export function Comments({ itemId }: ICommentsLayout) {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [newComment, setNewComment] = useState<string>('');
   const { id, accessToken, username } = useAppSelector(
@@ -50,14 +54,19 @@ export function Comments({ itemId }: ICommentsLayout) {
         })
       );
       refetch();
-    } else if (isSendError) {
-      dispatch(
-        setAlert({
-          isOpen: true,
-          text: 'Oops! Something went wrong',
-          type: 'error',
-        })
-      );
+    } else if (isSendError && sendError) {
+      if (rtkErrorHandler(sendError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
     }
   }, [isSendSuccess]);
 
@@ -68,7 +77,7 @@ export function Comments({ itemId }: ICommentsLayout) {
   return (
     <Box>
       {isError ? (
-        <Typography>Something went wrong</Typography>
+        <Typography>{t('error.wrong')}</Typography>
       ) : isLoading ? (
         <Loader />
       ) : (
@@ -80,7 +89,7 @@ export function Comments({ itemId }: ICommentsLayout) {
               fontSize="35px"
               marginBottom="30px"
             >
-              Comments:
+              {t('comment.comments')}
             </Typography>
             {data.map((comment) => (
               <CommentCard
@@ -98,13 +107,13 @@ export function Comments({ itemId }: ICommentsLayout) {
                 fontSize="20px"
                 marginBottom="10px"
               >
-                Send comment:
+                {t('comment.send_comment')}
               </Typography>
               <FormControl fullWidth>
                 <CommentInput
                   value={newComment}
                   onChange={handleInput}
-                  placeholder="Type something here…"
+                  placeholder={`${t('comment.type')}`}
                   minRows={3}
                 />
                 <LoadingButton
@@ -114,7 +123,7 @@ export function Comments({ itemId }: ICommentsLayout) {
                   disabled={newComment.trim() === ''}
                   sx={{ ml: 'auto' }}
                 >
-                  Send
+                  {t('comment.send')}
                 </LoadingButton>
               </FormControl>
             </Box>

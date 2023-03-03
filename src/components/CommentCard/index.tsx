@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ICommentCard } from './comment-card.types';
 import { Clickable, CommentWrapper } from '../../UI';
 import { dateConverter } from '../../helpers/utils/dateConverter';
+import {useTranslation} from "react-i18next";
 
 export function CommentCard({
   authorId,
@@ -11,6 +12,7 @@ export function CommentCard({
   text,
   createdAt,
 }: ICommentCard) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <CommentWrapper>
@@ -23,7 +25,7 @@ export function CommentCard({
               margin="0"
               textAlign="left"
             >
-              From:
+              {t('comment.from')}
             </Typography>
             <Clickable
               onClick={() => navigate(`/personal-account/${authorId}`)}

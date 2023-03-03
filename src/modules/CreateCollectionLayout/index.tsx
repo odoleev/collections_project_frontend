@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { ICreateCollectionLayout } from './create-collection.types';
 import { Loader, PageContainer } from '../../UI';
 import { collectionsAPI } from '../../store/services';
 import { CollectionThemesEnum } from '../../types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { CreateEditCollectionForm } from '../CreateEditCollectionForm';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
+import { logoutUser, setAlert } from '../../store/reducers';
 
 export function CreateCollectionLayout({ userId }: ICreateCollectionLayout) {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const goBackPath = `/personal-account/${userId}`;
   const { accessToken } = useAppSelector((state) => state.authReducer);
   const [createCollection, { isSuccess, isError, isLoading, error }] =
     collectionsAPI.useCreateCollectionMutation();
-
-  const navigate = useNavigate();
-  const goBackPath = `/personal-account/${userId}`;
 
   const handleCancel = () => {
     navigate(goBackPath);
@@ -75,8 +80,30 @@ export function CreateCollectionLayout({ userId }: ICreateCollectionLayout) {
   useEffect(() => {
     if (isSuccess) {
       navigate(goBackPath);
-    } else if (isError) console.log(error);
-  }, [isSuccess, isError]);
+    } else if (isError && error) {
+      if (rtkErrorHandler(error).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else if (rtkErrorHandler(error).statusCode === 400) {
+        const errorText = rtkErrorHandler(error).message.join(', ');
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: errorText,
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
+  }, [isSuccess, isError, error]);
 
   return (
     <PageContainer>
@@ -124,7 +151,7 @@ export function CreateCollectionLayout({ userId }: ICreateCollectionLayout) {
         />
         <Box minWidth="280px" display="flex" justifyContent="center">
           <Button onClick={handleCreate} variant="contained">
-            {isLoading ? <Loader /> : 'Create collection'}
+            {isLoading ? <Loader /> : t('personal.create')}
           </Button>
         </Box>
       </Box>

@@ -12,3 +12,4 @@ export { DeleteDialog } from './DeleteDialog';
 export { ItemsCardList, CollectionCardList } from './CardList';
 export { CommentCard } from './CommentCard';
 export { SortAndSearch } from './SortAndSearch';
+export { NoComments } from './NoComments';

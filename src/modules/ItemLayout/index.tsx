@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Box, Button, Divider} from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { IItemLayout } from './item-layout.types';
-import { useAppSelector } from '../../store/hooks/redux';
-import { itemsAPI } from '../../store/services/ItemsServices';
-import { collectionsAPI } from '../../store/services';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
+import { itemsAPI, collectionsAPI } from '../../store/services';
 import { Loader, PageContainer } from '../../UI';
-import { IncorrectID } from '../../components';
+import {IncorrectID, NoComments} from '../../components';
 import { CreateEditItemForm } from '../CreateEditItemForm';
 import { ItemsDescription } from './ItemDescription';
 import { Comments } from '../Comments';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
+import { logoutUser, setAlert } from '../../store/reducers';
 
 export function ItemLayout({ itemId }: IItemLayout) {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id, accessToken } = useAppSelector((state) => state.authReducer);
   const [isEdit, setEdit] = useState<boolean>(false);
@@ -146,18 +150,44 @@ export function ItemLayout({ itemId }: IItemLayout) {
   useEffect(() => {
     if (isEditSuccess) {
       setEdit(false);
-    } else if (isEditError) console.log(editError);
-  }, [isEditSuccess, isEditError]);
+    } else if (isEditError && editError) {
+      if (rtkErrorHandler(editError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
+  }, [isEditSuccess, isEditError, editError]);
 
   useEffect(() => {
     if (isDeleteSuccess && collectionData) {
       navigate(`/personal-account/${collectionData.creatorId}`);
-    } else if (isDeleteError) console.log(deleteError);
-  }, [isDeleteError, isDeleteSuccess]);
+    } else if (isDeleteError && deleteError) {
+      if (rtkErrorHandler(deleteError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
+  }, [isDeleteError, isDeleteSuccess, deleteError]);
 
   return isItemError ? (
     <PageContainer>
-      <IncorrectID>No item with such id</IncorrectID>
+      <IncorrectID>{t('error.item_id')}</IncorrectID>
     </PageContainer>
   ) : (
     <PageContainer>
@@ -220,7 +250,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
               />
               <Box minWidth="280px" display="flex" justifyContent="center">
                 <Button onClick={handleEdit} variant="contained">
-                  {isEditLoading ? <Loader /> : 'Edit Item'}
+                  {isEditLoading ? <Loader /> : `${t('item.edit')}`}
                 </Button>
               </Box>
             </Box>
@@ -240,12 +270,12 @@ export function ItemLayout({ itemId }: IItemLayout) {
               {id ? (
                 <Comments itemId={itemId} />
               ) : (
-                <Box>Login to see comments</Box>
+                <NoComments/>
               )}
             </Box>
           )
         ) : (
-          <IncorrectID>Collection was deleted</IncorrectID>
+          <IncorrectID>{t('error.collection_deleted')}</IncorrectID>
         )
       ) : (
         <Loader />

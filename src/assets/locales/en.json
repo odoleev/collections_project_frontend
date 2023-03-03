@@ -1,0 +1,126 @@
+{
+  "search": "Search",
+  "delete": "Delete",
+  "edit": "Edit",
+  "dialog_delete": "Do you want to delete?",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "error": {
+    "wrong": "Something went wrong",
+    "user_id": "No user with such id",
+    "collection_id": "No Collection with such id",
+    "item_id": "No item with such id",
+    "collection_deleted": "Collection was deleted"
+  },
+  "header": {
+    "main": "Main",
+    "collections": "collections",
+    "users": "Users",
+    "change_theme": "Change theme",
+    "language": "Change language",
+    "login": "Sign in",
+    "registration": "Sign up",
+    "logout": "Logout"
+  },
+  "login": {
+    "password": "Password",
+    "ban": "This user is banned!",
+    "sign_in": "Sign in"
+  },
+  "registration": {
+    "password": "Password",
+    "username": "Username",
+    "confirm": "Confirm Password",
+    "sign_up": "Sign up",
+    "success": "Successfully signed up!"
+  },
+  "main": {
+    "tags": "Most popular tags",
+    "collections": "Collections with most Items",
+    "items": "Last added items"
+  },
+  "card": {
+    "theme": "Theme:",
+    "author": "Created by:",
+    "items": "Items:",
+    "empty": "No collections yet",
+    "tags": "Tags:",
+    "collection": "Collection:",
+    "no_items": "No items yet"
+  },
+  "table": {
+    "username": "Username",
+    "role": "Role",
+    "status": "Ban Status",
+    "refresh": "Refresh",
+    "block": "Block",
+    "user": "Make user",
+    "admin": "Make admin",
+    "unblock": "Unblock",
+    "delete": "Delete"
+  },
+  "personal": {
+    "create": "Create Collection",
+    "collections": "collections",
+    "created_desc": "Creation (descending)",
+    "created_asc": "Creation (ascending)",
+    "theme_desc": "Theme (descending)",
+    "theme_asc": "Theme (ascending)",
+    "name_desc": "Name (descending)",
+    "name_asc": "Name (ascending)"
+  },
+  "collection": {
+    "description":"Description",
+    "create": "Create Collection",
+    "edit": "Edit collection",
+    "cancel": "Cancel",
+    "collection_name": "Collection name",
+    "collection_theme": "Collection theme",
+    "collection_image": "Collection image",
+    "collection_description": "Collection description (with markdown)",
+    "optional": "Optional fields for items",
+    "optional_description": "You can name 15 optional fields for items in collection: 3 string, 3 number, 3 text (with markdown), 3 date and 3 boolean. If you dont need it just keep it empty.",
+    "string": "String",
+    "text": "Text",
+    "number": "Number",
+    "date": "Date",
+    "boolean": "Boolean",
+    "add_item": "Add item",
+    "created_desc": "Creation (descending)",
+    "created_asc": "Creation (ascending)",
+    "name_desc": "Name (descending)",
+    "name_asc": "Name (ascending)",
+    "created": "Created:",
+    "theme": "Theme:",
+    "items": "Items:",
+    "author": "Author:",
+    "optional_list": "Additional items options:"
+  },
+  "item": {
+    "edit": "Edit item",
+    "create": "Create item",
+    "created": "Created:",
+    "tags": "Tags:",
+    "like": "Like",
+    "collection": "Collection:",
+    "see_comments": "Login to see comments",
+    "name": "Item name",
+    "tags_pick": "Tags (up to 3)"
+  },
+  "comment": {
+    "send": "Send",
+    "comments": "Comments:",
+    "send_comment": "Send comment",
+    "type": "Type something here…",
+    "from": "From:"
+  },
+  "search_fulltext": {
+    "title": "Search result:",
+    "created_desc": "Creation (descending)",
+    "created_asc": "Creation (ascending)",
+    "name_desc": "Name (descending)",
+    "name_asc": "Name (ascending)",
+    "collection_desc": "Collection name (descending)",
+    "collection_asc": "Collection name (ascending)"
+  }
+}

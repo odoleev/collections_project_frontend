@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import {
   AdminPanelSettings,
@@ -7,12 +7,14 @@ import {
   Done,
   Person,
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { RolesEnum } from '../../types';
 import { authAPI, usersAPI } from '../../store/services';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { logoutUser } from '../../store/reducers';
 
 export function TableActions({ row }: { row: any }) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { id: currentId, accessToken } = useAppSelector(
     (state) => state.authReducer
@@ -47,7 +49,7 @@ export function TableActions({ row }: { row: any }) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <Tooltip arrow placement="top" title="Block">
+      <Tooltip arrow placement="top" title={t('table.block')}>
         <span>
           <IconButton
             disabled={row.original.banStatus === 'true'}
@@ -59,7 +61,7 @@ export function TableActions({ row }: { row: any }) {
         </span>
       </Tooltip>
 
-      <Tooltip arrow placement="top" title="Unblock">
+      <Tooltip arrow placement="top" title={t('table.unblock')}>
         <span>
           <IconButton
             disabled={row.original.banStatus === 'false'}
@@ -67,13 +69,12 @@ export function TableActions({ row }: { row: any }) {
             onClick={() => unblockUser(row.original.id)}
           >
             <Done />
-          </IconButton>{' '}
+          </IconButton>
         </span>
       </Tooltip>
 
-      <Tooltip arrow placement="top" title="Make admin">
+      <Tooltip arrow placement="top" title={t('table.admin')}>
         <span>
-          {' '}
           <IconButton
             disabled={row.original.roles === RolesEnum.ADMIN}
             color="primary"
@@ -84,7 +85,7 @@ export function TableActions({ row }: { row: any }) {
         </span>
       </Tooltip>
 
-      <Tooltip arrow placement="top" title="Make user">
+      <Tooltip arrow placement="top" title={t('table.user')}>
         <span>
           <IconButton
             disabled={row.original.roles === RolesEnum.USER}
@@ -96,7 +97,7 @@ export function TableActions({ row }: { row: any }) {
         </span>
       </Tooltip>
 
-      <Tooltip arrow placement="top" title="Delete">
+      <Tooltip arrow placement="top" title={t('table.delete')}>
         <span>
           <IconButton
             color="error"

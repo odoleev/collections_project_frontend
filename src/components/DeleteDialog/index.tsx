@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { IDeleteDialog } from './delete-dialog.types';
 
 export function DeleteDialog({
@@ -14,6 +15,7 @@ export function DeleteDialog({
   handleClose,
   handleConfirm,
 }: IDeleteDialog) {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -22,12 +24,12 @@ export function DeleteDialog({
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Do you want to delete?
+          {t('dialog_delete')}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleConfirm}>Confirm</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
+        <Button onClick={handleConfirm}>{t('confirm')}</Button>
       </DialogActions>
     </Dialog>
   );

@@ -7,6 +7,7 @@ import {
   IItem,
   IGetQueries,
   IQueriesAndId,
+  ITagsQueries,
 } from '../../types';
 
 export const itemsAPI = createApi({
@@ -61,11 +62,23 @@ export const itemsAPI = createApi({
       }),
       invalidatesTags: ['Items'],
     }),
-    findByTags: build.mutation<IApiItems, { body: string[] }>({
-      query: ({ body }) => ({
+    findByTags: build.mutation<IApiItems, ITagsQueries>({
+      query: ({ body, search, limit, page, sort }) => ({
         url: `tags`,
         method: MethodEnum.POST,
+        params: {
+          limit,
+          page,
+          search,
+          sort,
+        },
         body,
+      }),
+    }),
+    getTags: build.mutation({
+      query: () => ({
+        url: `tags-cloud`,
+        method: MethodEnum.POST,
       }),
     }),
     likeItem: build.mutation<

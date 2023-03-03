@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks/redux';
 import { authAPI } from '../../store/services';
 import { setUser, setAlert } from '../../store/reducers';
@@ -15,6 +16,7 @@ interface FormInputs {
 }
 
 export function LoginForm() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ export function LoginForm() {
     {
       name: 'password',
       type: 'password',
-      label: 'Password',
+      label: `${t('login.password')}`,
     },
   ];
 
@@ -53,7 +55,7 @@ export function LoginForm() {
           setAlert({
             isOpen: true,
             type: 'error',
-            text: 'This user is banned!',
+            text: `${t('login.ban')}`,
           })
         );
         return;
@@ -81,7 +83,7 @@ export function LoginForm() {
         display="flex"
       >
         <AuthForm
-          buttonText="Sign in"
+          buttonText={`${t('login.sign_in')}`}
           fields={loginFormFields}
           schema={loginSchema}
           error={loginError}

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
+import { ISortOptions } from '../../types';
 import { itemsAPI } from '../../store/services';
+import { setAlert } from '../../store/reducers';
 import { Loader, PageContainer } from '../../UI';
 import { ItemsCardList, SortAndSearch } from '../../components';
-import { ISortOptions } from '../../types';
-import { setAlert } from '../../store/reducers';
 
-export function SearchLayout() {
+export function TagsLayout() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { search } = useAppSelector((state) => state.searchReducer);
+  const { tag } = useAppSelector((state) => state.searchReducer);
   const navigate = useNavigate();
 
   const [sort, setSort] = useState<[string, -1 | 1]>(['createdAt', -1]);
@@ -48,33 +48,27 @@ export function SearchLayout() {
       sort: ['collectionName', 1],
     },
   ];
-  const {
-    data: searchData,
-    isError: isSearchError,
-    isLoading: isSearchLoading,
-    isSuccess: isSearchSuccess,
-    refetch,
-  } = itemsAPI.useGetSearchItemsQuery({
-    limit: 6,
-    page,
-    sort,
-    search,
-  });
+  const [
+    getItems,
+    {
+      data: tagData,
+      isError: isTagError,
+      isLoading: isTagLoading,
+      isSuccess: isTagSuccess,
+    },
+  ] = itemsAPI.useFindByTagsMutation();
 
-  const count = searchData
-    ? Math.ceil(searchData.totalCount.totalCount / 6)
-    : 0;
+  const count = tagData ? Math.ceil(tagData.totalCount.totalCount / 6) : 0;
 
   useEffect(() => {
-    if (search === '') {
+    if (tag === '') {
       navigate('/');
     }
-    refetch();
-  }, [search]);
+  }, [tag]);
 
   useEffect(() => {
-    if (search !== '') {
-      if (isSearchError) {
+    if (tag !== '') {
+      if (isTagError) {
         dispatch(
           setAlert({
             isOpen: true,
@@ -84,8 +78,23 @@ export function SearchLayout() {
         );
       }
     }
-  }, [isSearchError]);
+  }, [isTagError]);
 
+  useEffect(() => {
+    async function fetchTags() {
+      await getItems({ page, body: [tag], sort, limit: 6 });
+    }
+
+    fetchTags();
+  }, [page, sort]);
+
+  useEffect(() => {
+    async function fetchTags() {
+      await getItems({ page, body: [tag], sort, limit: 6 });
+    }
+
+    fetchTags();
+  }, []);
   return (
     <PageContainer>
       <Box marginBottom="30px" display="flex" gap="10px">
@@ -98,16 +107,16 @@ export function SearchLayout() {
           {t('search_fulltext.title')}
         </Typography>
         <Typography fontSize="25px" component="h2" fontWeight={700}>
-          {search}
+          {tag}
         </Typography>
       </Box>
-
-      {isSearchError ? (
+      {isTagError ? (
         <Typography>{t('error.wrong')}</Typography>
-      ) : isSearchLoading ? (
+      ) : isTagLoading ? (
         <Loader />
       ) : (
-        isSearchSuccess && (
+        isTagSuccess &&
+        tagData && (
           <Box>
             <SortAndSearch
               disableSearch
@@ -119,7 +128,7 @@ export function SearchLayout() {
               page={page}
               handlePage={handlePage}
               count={count}
-              data={searchData}
+              data={tagData}
             />
           </Box>
         )

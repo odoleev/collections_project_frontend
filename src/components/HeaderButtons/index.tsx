@@ -1,64 +1,50 @@
-import React, { useEffect } from 'react';
-import { LoadingButton } from '@mui/lab';
+import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { logoutUser } from '../../store/reducers';
-import { authAPI } from '../../store/services';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { IPageLink } from '../../types';
-
-const PUBLICBUTTONS: IPageLink[] = [
-  { name: 'Sign in', link: '/login' },
-  { name: 'Sign up', link: '/registration' },
-];
+import { HeaderButtonsText } from '../../UI';
 
 export function HeaderButtons() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { username, accessToken } = useAppSelector(
+  const PUBLICBUTTONS: IPageLink[] = [
+    { name: t('header.login'), link: '/login' },
+    { name: t('header.registration'), link: '/registration' },
+  ];
+
+  const { username } = useAppSelector(
     (state) => state.authReducer
   );
-  const [
-    logout,
-    {
-      error: logoutError,
-      isSuccess: isLogoutSuccess,
-      isLoading: isLogoutLoading,
-      isError: isLogoutError,
-    },
-  ] = authAPI.useLogoutMutation();
+
   const handleLogout = async () => {
-    if (accessToken) {
-      await logout(accessToken);
-    }
+    dispatch(logoutUser());
+    navigate('/');
   };
 
-  useEffect(() => {
-    if (isLogoutSuccess) {
-      dispatch(logoutUser());
-      navigate('/');
-    }
-  }, [isLogoutSuccess]);
   return (
     <Box sx={{ flexGrow: 0 }}>
       {username ? (
-        <LoadingButton
+        <Button
           variant="contained"
-          loading={isLogoutLoading}
           onClick={handleLogout}
         >
-          <Typography>logout</Typography>
-        </LoadingButton>
+          <Typography>{t('header.logout')}</Typography>
+        </Button>
       ) : (
         <Box display="flex" gap="5px">
           {PUBLICBUTTONS.map((button) => (
             <Button
+              size="medium"
               key={button.name}
               variant="contained"
               onClick={() => navigate(button.link)}
             >
-              <Typography>{button.name}</Typography>
+              <HeaderButtonsText>{button.name}</HeaderButtonsText>
             </Button>
           ))}
         </Box>

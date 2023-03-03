@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import CreatableSelect from 'react-select/creatable';
-import { MultiValue } from 'react-select';
+import { MultiValue, StylesConfig } from 'react-select';
+import { useTranslation } from 'react-i18next';
 import { ICreateEditItems } from './create-edit-items.types';
 import { StyledInput } from '../../UI';
 import { OptionalStrings } from './OptionalStrings';
@@ -9,8 +10,17 @@ import { OptionalDates } from './OptionalDates';
 import { OptionalNumbers } from './OptionalNumbers';
 import { OptionalBooleans } from './OptionalBooleans';
 import { OptionalMDs } from './OptionalMDs';
+import { itemsAPI } from '../../store/services';
+
+const customStyles: StylesConfig<{ label: string; value: string }> = {
+  option: (base, state) => ({
+    ...base,
+    color: '#1e2022',
+  }),
+};
 
 export function CreateEditItemForm(props: ICreateEditItems) {
+  const { t } = useTranslation();
   const {
     isEdit = false,
     name,
@@ -69,10 +79,16 @@ export function CreateEditItemForm(props: ICreateEditItems) {
     return { label: tag, value: tag };
   });
 
+  const [options, setOptions] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
+
+  const [getTags, { data, isSuccess }] = itemsAPI.useGetTagsMutation();
+
   const onTagChange = (
     newValue: MultiValue<{ label: string; value: string }>
   ) => {
-    if (properTags.length < 4) {
+    if (properTags.length < 3) {
       setTags(
         newValue.map((tag) => {
           return tag.value as string;
@@ -80,6 +96,24 @@ export function CreateEditItemForm(props: ICreateEditItems) {
       );
     }
   };
+
+  useEffect(() => {
+    async function fetchTags() {
+      await getTags(null);
+    }
+    fetchTags();
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      const toOptions = Object.keys(data).map((key) => {
+        return { value: key, label: key };
+      });
+      setOptions(toOptions);
+    }
+  }, [isSuccess]);
+
   return (
     <Box display="flex" flexDirection="column" gap="25px">
       <Typography component="h1" fontWeight="700" fontSize="40px">
@@ -87,14 +121,15 @@ export function CreateEditItemForm(props: ICreateEditItems) {
       </Typography>
       <Box minWidth="280px" display="flex" justifyContent="start">
         <Button onClick={handleCancel} variant="contained" color="warning">
-          Cancel
+          {t('cancel')}
         </Button>
       </Box>
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Item name
+          {t('item.name')}
         </Typography>
         <StyledInput
+          required
           value={name}
           onChange={(event) => setName(event.target.value)}
           type="text"
@@ -105,10 +140,16 @@ export function CreateEditItemForm(props: ICreateEditItems) {
       </Box>
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Tags (up to 3)
+          {t('item.tags_pick')}
         </Typography>
         <Box maxWidth="500px">
-          <CreatableSelect value={properTags} isMulti onChange={onTagChange} />
+          <CreatableSelect
+            styles={customStyles}
+            options={options}
+            value={properTags}
+            isMulti
+            onChange={onTagChange}
+          />
         </Box>
       </Box>
       <OptionalStrings

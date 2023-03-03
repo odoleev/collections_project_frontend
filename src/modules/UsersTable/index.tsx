@@ -5,12 +5,15 @@ import MaterialReactTable, {
 } from 'material-react-table';
 import { IconButton, Tooltip } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { usersAPI } from '../../store/services';
 import { IUsers, RolesEnum } from '../../types';
 import { TableActions } from '../../components';
 import { useAppDispatch } from '../../store/hooks/redux';
-import { setAlert } from '../../store/reducers';
-import { Loader } from '../../UI';
+import { logoutUser, setAlert } from '../../store/reducers';
+import { Loader, PageContainer } from '../../UI';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
 
 type Cols = {
   id: string;
@@ -21,6 +24,8 @@ type Cols = {
 };
 
 export function UsersTable() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -29,6 +34,7 @@ export function UsersTable() {
     pageSize: 10,
   });
   const {
+    error: usersError,
     data: usersData,
     isLoading: isUsersLoading,
     isError: isUserError,
@@ -48,13 +54,18 @@ export function UsersTable() {
 
   useEffect(() => {
     if (isUserError) {
-      dispatch(
-        setAlert({
-          isOpen: true,
-          type: 'error',
-          text: 'Server error',
-        })
-      );
+      if (rtkErrorHandler(usersError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
     }
   }, [isUserError]);
 
@@ -69,19 +80,19 @@ export function UsersTable() {
         accessorKey: 'email',
       },
       {
-        header: 'Username',
+        header: t('table.username'),
         accessorKey: 'username',
       },
       {
-        header: 'Ban Status',
+        header: t('table.status'),
         accessorKey: 'banStatus',
       },
       {
-        header: 'Role',
+        header: t('table.role'),
         accessorKey: 'roles',
       },
     ],
-    []
+    [t]
   );
   const data: Cols[] | undefined = usersData?.users.map((user: IUsers) => {
     return {
@@ -93,38 +104,42 @@ export function UsersTable() {
     };
   });
 
-  return usersData && !isUserError ? (
-    <MaterialReactTable
-      enableRowActions
-      enableFullScreenToggle={false}
-      enableColumnFilters={false}
-      manualFiltering
-      manualPagination
-      manualSorting
-      enableFilterMatchHighlighting={false}
-      onGlobalFilterChange={setGlobalFilter}
-      onPaginationChange={setPagination}
-      onSortingChange={setSorting}
-      rowCount={usersData ? usersData.totalCount : undefined}
-      columns={columns}
-      data={data ?? []}
-      renderRowActions={({ row }) => <TableActions row={row} />}
-      renderTopToolbarCustomActions={() => (
-        <Tooltip arrow title="Refresh Data">
-          <IconButton onClick={refetch}>
-            <Refresh />
-          </IconButton>
-        </Tooltip>
+  return (
+    <PageContainer>
+      {usersData && !isUserError ? (
+        <MaterialReactTable
+          enableRowActions
+          enableFullScreenToggle={false}
+          enableColumnFilters={false}
+          manualFiltering
+          manualPagination
+          manualSorting
+          enableFilterMatchHighlighting={false}
+          onGlobalFilterChange={setGlobalFilter}
+          onPaginationChange={setPagination}
+          onSortingChange={setSorting}
+          rowCount={usersData ? usersData.totalCount : undefined}
+          columns={columns}
+          data={data ?? []}
+          renderRowActions={({ row }) => <TableActions row={row} />}
+          renderTopToolbarCustomActions={() => (
+            <Tooltip arrow title={t('table.refresh')}>
+              <IconButton onClick={refetch}>
+                <Refresh />
+              </IconButton>
+            </Tooltip>
+          )}
+          state={{
+            showProgressBars: isUsersLoading,
+            globalFilter,
+            isLoading: isUsersLoading,
+            pagination,
+            sorting,
+          }}
+        />
+      ) : (
+        <Loader />
       )}
-      state={{
-        showProgressBars: isUsersLoading,
-        globalFilter,
-        isLoading: isUsersLoading,
-        pagination,
-        sorting,
-      }}
-    />
-  ) : (
-    <Loader />
+    </PageContainer>
   );
 }

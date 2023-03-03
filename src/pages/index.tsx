@@ -15,6 +15,7 @@ import { ItemPage } from './Item';
 import { Search } from './Search';
 import { CreateCollection } from './CreateCollection';
 import { CreateItem } from './CreateItem';
+import {Tags} from "./Tags";
 
 export function Routing() {
   const dispatch = useAppDispatch();
@@ -86,6 +87,14 @@ export function Routing() {
           element={
             <PublicElement>
               <Search />
+            </PublicElement>
+          }
+        />
+        <Route
+          path="tags"
+          element={
+            <PublicElement>
+              <Tags />
             </PublicElement>
           }
         />

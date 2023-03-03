@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, MenuItem, Select, Typography } from '@mui/material';
 import { Options } from 'easymde';
 import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
 import { StyledInput, StyledMDe } from '../../UI';
 import { CollectionThemesEnum } from '../../types';
 import { themes } from '../../helpers/assets/themes';
@@ -18,6 +12,7 @@ import { storage } from '../../config/firebase';
 import { ImageUploader } from '../../components';
 
 export function CreateEditCollectionForm(props: ICreateEditForm) {
+  const { t } = useTranslation();
   const {
     isEdit = false,
     handleCancel,
@@ -100,17 +95,17 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
   return (
     <Box display="flex" flexDirection="column" gap="25px">
       <Typography component="h1" fontWeight="700" fontSize="40px">
-        {isEdit ? 'Edit collection' : 'Create collection'}
+        {isEdit ? t('collection.edit') : t('collection.create')}
       </Typography>
       <Box minWidth="280px" display="flex" justifyContent="start">
         <Button onClick={handleCancel} variant="contained" color="warning">
-          Cancel
+          {t('collection.cancel')}
         </Button>
       </Box>
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Collection name
+          {t('collection.collection_name')}
         </Typography>
         <StyledInput
           value={name}
@@ -124,7 +119,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Collection theme
+          {t('collection.collection_theme')}
         </Typography>
         <Select
           value={theme}
@@ -153,7 +148,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Collection description (with markdown)
+          {t('collection.collection_description')}
         </Typography>
         <StyledMDe
           options={options}
@@ -170,18 +165,16 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
             fontWeight="700"
             color="text.secondary"
           >
-            Optional fields for items
+            {t('collection.optional')}
           </Typography>
           <Typography component="div" fontSize="15px" color="text.secondary">
-            You can name 15 optional fields for items in collection: 3 string, 3
-            number, 3 text (with markdown), 3 date and 3 boolean. If you dont
-            need it just keep it empty
+            {t('collection.optional_description')}
           </Typography>
         </Box>
 
         <Box display="flex" flexDirection="column" gap="10px">
           <Typography component="h5" fontWeight="700" color="text.secondary">
-            String
+            {t('collection.string')}
           </Typography>
           <Grid
             container
@@ -236,7 +229,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Number
+          {t('collection.number')}
         </Typography>
         <Grid
           container
@@ -284,7 +277,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Text
+          {t('collection.text')}
         </Typography>
         <Grid
           container
@@ -332,7 +325,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Date
+          {t('collection.date')}
         </Typography>
         <Grid
           container
@@ -380,7 +373,7 @@ export function CreateEditCollectionForm(props: ICreateEditForm) {
 
       <Box display="flex" flexDirection="column" gap="10px">
         <Typography component="h5" fontWeight="700" color="text.secondary">
-          Boolean
+          {t('collection.boolean')}
         </Typography>
         <Grid
           container

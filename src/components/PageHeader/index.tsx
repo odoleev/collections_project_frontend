@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { RolesEnum } from '../../types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { IPageHeader } from './head.types';
@@ -13,6 +14,7 @@ export function PageHeader({
   handleClick,
   buttonText,
 }: IPageHeader) {
+  const { t } = useTranslation();
   const { role, id: authId } = useAppSelector((state) => state.authReducer);
   return (
     <Box marginBottom="25px">
@@ -32,7 +34,7 @@ export function PageHeader({
                 variant="contained"
                 color="error"
               >
-                <Typography>Delete</Typography>
+                <Typography>{`${t('delete')}`}</Typography>
               </Button>
             )}
           </InfoContainer>

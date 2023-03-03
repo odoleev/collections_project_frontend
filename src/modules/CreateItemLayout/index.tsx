@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { ICreateItemLayout } from './create-item.types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { RolesEnum } from '../../types';
-import { collectionsAPI } from '../../store/services';
+import { collectionsAPI, itemsAPI } from '../../store/services';
 import { Loader, PageContainer } from '../../UI';
 import { CreateEditItemForm } from '../CreateEditItemForm';
-import { itemsAPI } from '../../store/services/ItemsServices';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
+import { logoutUser, setAlert } from '../../store/reducers';
 
 export function CreateItemLayout({ collectionId }: ICreateItemLayout) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const goBackPath = `/collection/${collectionId}`;
 
@@ -87,7 +90,29 @@ export function CreateItemLayout({ collectionId }: ICreateItemLayout) {
   useEffect(() => {
     if (isItemSucces) {
       navigate(goBackPath);
-    } else if (isItemError) console.log(itemError);
+    } else if (isItemError && itemError) {
+      if (rtkErrorHandler(itemError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else if (rtkErrorHandler(itemError).statusCode === 400) {
+        const errorText = rtkErrorHandler(itemError).message.join(', ');
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: errorText,
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
   }, [isItemSucces, isItemError]);
 
   useEffect(() => {
@@ -97,7 +122,13 @@ export function CreateItemLayout({ collectionId }: ICreateItemLayout) {
       }
       navigate(`/personal-account/${collection.creatorId}`);
     } else {
-      console.log(collError);
+      dispatch(
+        setAlert({
+          isOpen: true,
+          type: 'error',
+          text: 'Server error',
+        })
+      );
     }
   }, [isCollSuccess, collectionId]);
   return (

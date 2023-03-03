@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, MenuItem, Select, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { ISortAndSearch } from './sort-and-search.types';
+import {ResponsiveWrapper} from "../../UI";
 
 export function SortAndSearch({
   disableSearch = false,
@@ -9,13 +11,14 @@ export function SortAndSearch({
   options,
   sort,
 }: ISortAndSearch) {
+  const { t } = useTranslation();
   return (
-    <Box marginBottom="35px" alignItems="center" display="flex" gap="15px">
+    <ResponsiveWrapper>
       {!disableSearch && setSearch && (
         <TextField
           onChange={(event) => setSearch(event.target.value)}
           id="standard-basic"
-          label="Search"
+          label={t('search')}
           variant="outlined"
           size="small"
         />
@@ -33,6 +36,6 @@ export function SortAndSearch({
           </MenuItem>
         ))}
       </Select>
-    </Box>
+    </ResponsiveWrapper>
   );
 }

@@ -1,6 +1,8 @@
-import {IPageLink} from "../../types";
+import { IPageLink } from '../../types';
 
 export interface IHeaderMenu {
-options: IPageLink[];
-handleClose: () => void;
+  options?: IPageLink[];
+  handleClose: () => void;
+  language: 'ru' | 'en';
+  changeLanguage: () => void;
 }

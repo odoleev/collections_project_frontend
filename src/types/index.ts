@@ -9,3 +9,4 @@ export * from './collections';
 export * from './sortOptions';
 export * from './comments';
 export * from './items';
+export * from './languagesTypes';

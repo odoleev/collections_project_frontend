@@ -1,42 +1,51 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { ICollectionLayout } from './collection-layout.types';
 import { collectionsAPI, itemsAPI } from '../../store/services';
-import { Loader, PageContainer } from '../../UI';
+import { HeaderButtonsText, Loader, PageContainer } from '../../UI';
 import { IncorrectID, ItemsCardList, SortAndSearch } from '../../components';
 import { CreateEditCollectionForm } from '../CreateEditCollectionForm';
 import { CollectionThemesEnum, ISortOptions, RolesEnum } from '../../types';
 import { useAppSelector } from '../../store/hooks/redux';
 import { CollectionDescription } from './CollectionDescription';
+import { rtkErrorHandler } from '../../helpers/utils/rtkErrorHandler';
+import { logoutUser, setAlert } from '../../store/reducers';
 
 export function CollectionLayout({ collectionId }: ICollectionLayout) {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id, accessToken, role } = useAppSelector(
     (state) => state.authReducer
   );
-  const lastElement = useRef();
   const [isEdit, setEdit] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [sort, setSort] = useState<[string, -1 | 1]>(['createdAt', -1]);
 
+  const handlePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   const sortOptions: ISortOptions[] = [
     {
-      title: 'Creation (descending)',
+      title: t('collection.created_desc'),
       sort: ['createdAt', -1],
     },
     {
-      title: 'Creation (ascending)',
+      title: t('collection.created_asc'),
       sort: ['createdAt', 1],
     },
     {
-      title: 'Name (descending)',
+      title: t('collection.name_desc'),
       sort: ['name', -1],
     },
     {
-      title: 'Name (ascending)',
+      title: t('collection.name_asc'),
       sort: ['name', 1],
     },
   ];
@@ -68,10 +77,14 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
     isLoading: isItemsLoading,
     error: collectionsError,
   } = itemsAPI.useGetCollectionItemsQuery({
+    limit: 6,
+    page,
     search,
     sort,
     id: collectionId,
   });
+
+  const count = itemsData ? Math.ceil(itemsData.totalCount.totalCount / 6) : 0;
 
   const {
     data: collectionData,
@@ -186,24 +199,56 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
   useEffect(() => {
     if (isEditSuccess) {
       setEdit(false);
-    } else if (isEditError) console.log(editError);
-  }, [isEditSuccess, isEditError]);
+    } else if (isEditError && editError) {
+      if (rtkErrorHandler(editError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
+  }, [isEditSuccess, isEditError, editError]);
 
   useEffect(() => {
     if (isItemsError) {
-      console.log(collectionsError);
+      dispatch(
+        setAlert({
+          isOpen: true,
+          type: 'error',
+          text: 'Server error',
+        })
+      );
     }
   }, [isItemsError]);
 
   useEffect(() => {
     if (isDeleteSuccess && collectionData) {
       navigate(`/personal-account/${collectionData.creatorId}`);
-    } else if (isDeleteError) console.log(deleteError);
-  }, [isDeleteError, isDeleteSuccess]);
+    } else if (isDeleteError && deleteError) {
+      if (rtkErrorHandler(deleteError).statusCode === 401) {
+        dispatch(logoutUser());
+        navigate('/');
+      } else {
+        dispatch(
+          setAlert({
+            isOpen: true,
+            type: 'error',
+            text: 'Server error',
+          })
+        );
+      }
+    }
+  }, [isDeleteError, isDeleteSuccess, deleteError]);
 
-  return isCollError || !collectionData ? (
+  return isCollError ? (
     <PageContainer>
-      <IncorrectID>No Collection with such id</IncorrectID>
+      <IncorrectID>{t('error.collection_id')}</IncorrectID>
     </PageContainer>
   ) : (
     <PageContainer>
@@ -255,7 +300,7 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
               />
               <Box minWidth="280px" display="flex" justifyContent="center">
                 <Button onClick={handleEdit} variant="contained">
-                  {isEditLoading ? <Loader /> : 'Edit collection'}
+                  {isEditLoading ? <Loader /> : `${t('collection.edit')}`}
                 </Button>
               </Box>
             </Box>
@@ -288,23 +333,30 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
                       size="small"
                       variant="contained"
                     >
-                      <Typography>Add item</Typography>
+                      <HeaderButtonsText>
+                        {t('collection.add_item')}
+                      </HeaderButtonsText>
                     </Button>
                   )}
                 </Box>
 
                 {isItemsSuccess ? (
-                  <ItemsCardList data={itemsData} />
+                  <ItemsCardList
+                    page={page}
+                    handlePage={handlePage}
+                    count={count}
+                    data={itemsData}
+                  />
                 ) : isItemsLoading ? (
                   <Loader />
                 ) : (
-                  <Typography>Server Error</Typography>
+                  <Typography>{t('error.wrong')}</Typography>
                 )}
               </Box>
             </Box>
           )
         ) : (
-          <IncorrectID>No Collection with such id</IncorrectID>
+          <IncorrectID>{t('error.collection_id')}</IncorrectID>
         )
       ) : (
         <Loader />

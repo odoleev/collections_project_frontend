@@ -2,7 +2,8 @@ import React from 'react';
 import { Box, CircularProgress, IconButton, Typography } from '@mui/material';
 import { FileUploader } from 'react-drag-drop-files';
 import { Close } from '@mui/icons-material';
-import { StyledUploadImage, UploadContainer} from '../../UI';
+import { useTranslation } from 'react-i18next';
+import { StyledUploadImage, UploadContainer } from '../../UI';
 import { fileTypes } from '../../helpers/assets/fileType';
 import { IImageUploader } from './image-uploader.types';
 
@@ -15,14 +16,19 @@ export function ImageUploader({
   setCurrentProgress,
   currentProgress,
 }: IImageUploader) {
+  const { t } = useTranslation();
   return (
     <Box display="flex" flexDirection="column" gap="10px">
       <Typography component="h5" fontWeight="700" color="text.secondary">
-        Collection image
+        {t('collection.collection_image')}
       </Typography>
       {imgUrl ? (
         <Box display="flex" flexDirection="column" gap="5px">
-          <StyledUploadImage src={imgUrl} alt="Collection image" loading="lazy" />
+          <StyledUploadImage
+            src={imgUrl}
+            alt="Collection image"
+            loading="lazy"
+          />
         </Box>
       ) : null}
       <UploadContainer>

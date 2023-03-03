@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IBurgerMenu } from './burger-menu.types';
 
 export function BurgerMenu({
@@ -16,7 +10,10 @@ export function BurgerMenu({
   handleClose,
   handleOpen,
   anchor,
+  language,
+  changeLanguage,
 }: IBurgerMenu) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <Box
@@ -53,25 +50,29 @@ export function BurgerMenu({
           display: { xs: 'block', md: 'none' },
         }}
       >
+        <MenuItem onClick={changeLanguage}>
+          <Typography> {`${t('header.language')}: ${language}`}</Typography>
+        </MenuItem>
         <MenuItem
           onClick={() => {
             navigate('/');
             handleClose();
           }}
         >
-          Main
+          {t('header.main')}
         </MenuItem>
-        {options.map((option) => (
-          <MenuItem
-            key={option.name}
-            onClick={() => {
-              handleClose();
-              navigate(option.link);
-            }}
-          >
-            <Typography textAlign="center">{option.name}</Typography>
-          </MenuItem>
-        ))}
+        {options &&
+          options.map((option) => (
+            <MenuItem
+              key={option.name}
+              onClick={() => {
+                handleClose();
+                navigate(option.link);
+              }}
+            >
+              <Typography textAlign="center">{option.name}</Typography>
+            </MenuItem>
+          ))}
       </Menu>
     </Box>
   );

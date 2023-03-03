@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { FavoriteTwoTone } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { DeleteDialog, PageHeader } from '../../../components';
 import { IItemsDescription } from './items-description.types';
 import { BigTag, Clickable, InfoContainer } from '../../../UI';
@@ -20,6 +21,7 @@ export function ItemsDescription({
   handleDelete,
   userId,
 }: IItemsDescription) {
+  const { t } = useTranslation();
   const { id, accessToken } = useAppSelector((state) => state.authReducer);
   const navigate = useNavigate();
   const [like] = itemsAPI.useLikeItemMutation();
@@ -35,7 +37,7 @@ export function ItemsDescription({
       <PageHeader
         isDeleteButton
         titleText={itemData.name}
-        buttonText="Edit"
+        buttonText={t('edit')}
         userId={collectionData.creatorId}
         handleClick={handleEditButton}
         handleOpen={handleOpenDelete}
@@ -47,7 +49,7 @@ export function ItemsDescription({
       />
 
       <Box display="flex" alignItems="center" gap="2px">
-        <Tooltip title="Like item">
+        <Tooltip title={t('item.like')}>
           <IconButton onClick={handleLike} disabled={!userId}>
             <FavoriteTwoTone
               color={
@@ -67,7 +69,7 @@ export function ItemsDescription({
       </Box>
 
       <InfoContainer>
-        <Typography color="text.secondary">Created:</Typography>
+        <Typography color="text.secondary">{t('item.created')}</Typography>
         <Typography fontWeight={600}>
           {dateConverter(itemData.createdAt)}
         </Typography>
@@ -80,7 +82,7 @@ export function ItemsDescription({
           alignItems="center"
           gap="5px"
         >
-          Tags:
+          {t('item.tags')}
           <Typography
             component="div"
             display="flex"
@@ -95,7 +97,7 @@ export function ItemsDescription({
         </Typography>
       </InfoContainer>
       <InfoContainer>
-        <Typography color="text.secondary">Collection:</Typography>
+        <Typography color="text.secondary">{t('item.collection')}</Typography>
         <Clickable
           onClick={() => navigate(`/collection/${itemData.collectionId}`)}
           fontWeight={600}

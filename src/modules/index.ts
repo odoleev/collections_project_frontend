@@ -8,3 +8,4 @@ export { UsersTable } from './UsersTable';
 export { CreateItemLayout } from './CreateItemLayout';
 export { ItemLayout } from './ItemLayout';
 export { SearchLayout } from './SearchLayout';
+export { TagsLayout } from './TagsLayout';

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { setupStore } from './store/store';
 import { App } from './App';
 import './index.css';
+import './i18next';
 
 const store = setupStore();
 

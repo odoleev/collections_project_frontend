@@ -1,40 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar,
   Box,
-  Button,
   Container,
-  createTheme,
   IconButton,
-  InputBase,
-  Paper,
   Toolbar,
+  Tooltip,
   useTheme,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../store/hooks/redux';
 import { RolesEnum, IPageLink } from '../../types';
 import { BurgerMenu, HeaderButtons, HeaderMenu } from '../../components';
 import { SearchInput } from './SearchInput';
 import { ColorModeContext } from '../../context/theme-context';
+import i18n from '../../i18next';
 
 export function Header() {
+  const { t } = useTranslation();
+  const [language, setLanguage] = useState<'en' | 'ru'>('en');
+
+  const changeLanguage = () => {
+    if (language === 'ru') {
+      setLanguage('en');
+      i18n.changeLanguage('en');
+    } else {
+      setLanguage('ru');
+      i18n.changeLanguage('ru');
+    }
+  };
+
+  useEffect(() => {
+    setLanguage('en');
+    i18n.changeLanguage('en');
+  }, []);
+
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
-  const navigate = useNavigate();
   const { username, role, id } = useAppSelector((state) => state.authReducer);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
   const AuthPages: IPageLink[] = [
-    { name: `${username} Collections`, link: `/personal-account/${id}` },
+    {
+      name: `${username} ${t('header.collections')}`,
+      link: `/personal-account/${id}`,
+    },
   ];
   const AdminPages: IPageLink[] = [
-    { name: `${username} Collections`, link: `/personal-account/${id}` },
-    { name: 'Users', link: '/users' },
+    {
+      name: `${username} ${t('header.collections')}`,
+      link: `/personal-account/${id}`,
+    },
+    { name: `${t('header.users')}`, link: '/users' },
   ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -52,19 +73,27 @@ export function Header() {
           sx={{ display: 'flex', justifyContent: 'space-between' }}
           disableGutters
         >
-          <Box display="flex" gap="25px" alignItems="center">
+          <Box display="flex" gap="5px" alignItems="center">
             {!username && (
-              <Button
-                onClick={() => {
-                  navigate('/');
-                }}
-                sx={{ my: 2, color: 'mintcream', display: 'block' }}
-              >
-                Main
-              </Button>
+              <HeaderMenu
+                changeLanguage={changeLanguage}
+                language={language}
+                handleClose={handleCloseNavMenu}
+              />
+            )}
+            {!username && (
+              <BurgerMenu
+                changeLanguage={changeLanguage}
+                language={language}
+                handleClose={handleCloseNavMenu}
+                handleOpen={handleOpenNavMenu}
+                anchor={anchorElNav}
+              />
             )}
             {username && (
               <BurgerMenu
+                changeLanguage={changeLanguage}
+                language={language}
                 handleClose={handleCloseNavMenu}
                 options={role === RolesEnum.ADMIN ? AdminPages : AuthPages}
                 handleOpen={handleOpenNavMenu}
@@ -73,23 +102,28 @@ export function Header() {
             )}
             {username && (
               <HeaderMenu
+                changeLanguage={changeLanguage}
+                language={language}
                 options={role === RolesEnum.ADMIN ? AdminPages : AuthPages}
                 handleClose={handleCloseNavMenu}
               />
             )}
             <Box>
-              <IconButton
-                onClick={colorMode.toggleColorMode}
-                color="inherit"
-                size="small"
-              >
-                {theme.palette.mode === 'dark' ? (
-                  <Brightness7Icon />
-                ) : (
-                  <Brightness4Icon />
-                )}
-              </IconButton>
+              <Tooltip arrow title={t('header.change_theme')}>
+                <IconButton
+                  onClick={colorMode.toggleColorMode}
+                  color="inherit"
+                  size="small"
+                >
+                  {theme.palette.mode === 'dark' ? (
+                    <Brightness7Icon />
+                  ) : (
+                    <Brightness4Icon />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
+            <Box />
           </Box>
 
           <Box display="flex" alignItems="center" gap="10px">
