@@ -53,6 +53,7 @@ export function SearchLayout() {
     isError: isSearchError,
     isLoading: isSearchLoading,
     isSuccess: isSearchSuccess,
+    refetch,
   } = itemsAPI.useGetSearchItemsQuery({
     limit: 6,
     page,
@@ -66,11 +67,7 @@ export function SearchLayout() {
     if (search === '') {
       navigate('/');
     }
-    // async function forRefetch() {
-    //   await refetch();
-    // }
-    // console.log(searchData)
-    // forRefetch();
+    refetch();
   }, [search]);
 
   useEffect(() => {
