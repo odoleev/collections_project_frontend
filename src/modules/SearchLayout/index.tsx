@@ -65,8 +65,6 @@ export function SearchLayout() {
     ? Math.ceil(searchData.totalCount.totalCount / 6)
     : 0;
 
-  console.log(count);
-
   useEffect(() => {
     if (search === '') {
       navigate('/');
