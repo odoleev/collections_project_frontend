@@ -6,7 +6,7 @@ import { IItemLayout } from './item-layout.types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
 import { itemsAPI, collectionsAPI } from '../../store/services';
 import { Loader, PageContainer } from '../../UI';
-import {IncorrectID, NoComments} from '../../components';
+import { IncorrectID, NoComments } from '../../components';
 import { CreateEditItemForm } from '../CreateEditItemForm';
 import { ItemsDescription } from './ItemDescription';
 import { Comments } from '../Comments';
@@ -168,7 +168,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
 
   useEffect(() => {
     if (isDeleteSuccess && collectionData) {
-      navigate(`/personal-account/${collectionData.creatorId}`);
+      navigate(`/collection/${collectionData._id}`);
     } else if (isDeleteError && deleteError) {
       if (rtkErrorHandler(deleteError).statusCode === 401) {
         dispatch(logoutUser());
@@ -267,11 +267,7 @@ export function ItemLayout({ itemId }: IItemLayout) {
                 handleDelete={handleDelete}
               />
               <Divider component="div" />
-              {id ? (
-                <Comments itemId={itemId} />
-              ) : (
-                <NoComments/>
-              )}
+              {id ? <Comments itemId={itemId} /> : <NoComments />}
             </Box>
           )
         ) : (
