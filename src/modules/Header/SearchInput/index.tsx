@@ -4,7 +4,7 @@ import { SearchRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../../store/hooks/redux';
-import { setSearch, setTag } from '../../../store/reducers';
+import { setSearch } from '../../../store/reducers';
 
 export function SearchInput() {
   const { t } = useTranslation();
@@ -13,7 +13,6 @@ export function SearchInput() {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleClick = () => {
-    dispatch(setTag({ tag: '' }));
     dispatch(setSearch({ search: searchValue }));
     setSearchValue('');
     navigate('/search');

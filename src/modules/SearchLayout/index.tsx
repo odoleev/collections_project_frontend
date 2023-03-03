@@ -12,7 +12,7 @@ import { setAlert } from '../../store/reducers';
 export function SearchLayout() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { search } = useAppSelector((state) => state.searchReducer);
+  const search = useAppSelector((state) => state.searchReducer.search);
   const navigate = useNavigate();
 
   const [sort, setSort] = useState<[string, -1 | 1]>(['createdAt', -1]);
@@ -58,12 +58,14 @@ export function SearchLayout() {
     limit: 6,
     page,
     sort,
-    search,
+    search: { search },
   });
 
   const count = searchData
     ? Math.ceil(searchData.totalCount.totalCount / 6)
     : 0;
+
+  console.log(count);
 
   useEffect(() => {
     if (search === '') {

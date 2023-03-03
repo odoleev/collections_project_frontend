@@ -2,7 +2,7 @@ export interface IGetQueries {
   limit?: number;
   page?: number;
   sort: [string, number] | [];
-  search: string;
+  search: { search: string };
 }
 
 export interface ITagsQueries {
