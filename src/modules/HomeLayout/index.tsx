@@ -68,9 +68,9 @@ export function HomeLayout() {
     }
   }, [isTagsSuccess]);
   return (
-    <Box>
+    <PageContainer>
       {isCollError || isItemError ? (
-        <PageContainer>{t('error.wrong')}</PageContainer>
+        <Typography>{t('error.wrong')}</Typography>
       ) : isCollLoading && isItemLoading ? (
         <Loader />
       ) : (
@@ -111,6 +111,6 @@ export function HomeLayout() {
           </PageContainer>
         )
       )}
-    </Box>
+    </PageContainer>
   );
 }
