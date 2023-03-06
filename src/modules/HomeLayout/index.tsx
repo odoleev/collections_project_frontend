@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { TagCloud } from 'react-tagcloud';
 import { useNavigate } from 'react-router-dom';
-import { Loader, PageContainer } from '../../UI';
+import {Loader, PageContainer, StyleTagCloud} from '../../UI';
 import { CollectionCardList, ItemsCardList } from '../../components';
 import { collectionsAPI, itemsAPI } from '../../store/services';
 import { useAppDispatch } from '../../store/hooks/redux';
@@ -82,7 +82,7 @@ export function HomeLayout() {
                 <Typography fontSize="30px" fontWeight={700} component="h1">
                   {t('main.tags')}
                 </Typography>
-                <TagCloud
+                <StyleTagCloud
                   onClick={(tag: { value: string; count: number }) => {
                     dispatch(setTag({ tag: tag.value }));
                     navigate('/tags');

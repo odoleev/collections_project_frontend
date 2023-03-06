@@ -13,3 +13,4 @@ export * from './CommentInput';
 export * from './MDWrapper';
 export * from './HeaderButtonsText';
 export * from './ResponsiveWrapper';
+export * from './StyleTagCloud';
