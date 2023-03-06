@@ -1,8 +1,6 @@
 import * as yup from 'yup';
 
 const emailPattern = /^\S+@\S+$/i;
-const passwordPattern =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
 export const loginSchema = yup
   .object({
@@ -39,7 +37,10 @@ export const registrationSchema = yup
       .matches(/[0-9]/, 'Password requires a number')
       .matches(/[a-z]/, 'Password requires a lowercase letter')
       .matches(/[A-Z]/, 'Password requires an uppercase letter')
-      .matches(/[^\w]/, 'Password requires a symbol'),
+      .matches(
+        /[^\w]/,
+        'Password requires a symbol: ~`! @#$%^&*()_-+={[}]|\\:;"\'<,>.?/'
+      ),
     confirmPassword: yup
       .string()
       .required('Confirm password is required field')
