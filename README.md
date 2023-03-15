@@ -22,7 +22,7 @@ Website for collectors where they can find or post collections. I made frontend 
 -Item page with live comments and likes (one user can post one like).
 ![Item](/public/img/item.gif "Item")
 -Full text search items (with Mongo Atlas).
-![Search](/public/img/item.gif "Search")
+![Search](/public/img/search.gif "Search")
 
 # Tech
 
