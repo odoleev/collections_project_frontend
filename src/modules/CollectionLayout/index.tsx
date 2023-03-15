@@ -324,6 +324,7 @@ export function CollectionLayout({ collectionId }: ICollectionLayout) {
                   justifyContent="space-between"
                 >
                   <SortAndSearch
+                    search={search}
                     setSearch={setSearch}
                     setSort={setSort}
                     options={sortOptions}

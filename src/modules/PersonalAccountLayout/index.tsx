@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IPersonaAccount } from './personal-account.types';
@@ -81,6 +81,7 @@ export function PersonalAccountLayout({ userId }: IPersonaAccount) {
     isError: isUserError,
     isLoading: isUserLoading,
   } = usersAPI.useGetUserQuery(userId);
+
   useEffect(() => {
     if (isCollectionsError) {
       dispatch(
@@ -96,9 +97,8 @@ export function PersonalAccountLayout({ userId }: IPersonaAccount) {
     <PageContainer>
       {isUserError || isCollectionsError ? (
         <IncorrectID>No user with such id</IncorrectID>
-      ) : !isUserLoading || !isCollectionLoading ? (
-        isUserSuccess &&
-        isCollSuccess && (
+      ) : !isUserLoading ? (
+        isUserSuccess ? (
           <Box>
             <PageHeader
               titleText={`${userData.username} ${t('personal.collections')}`}
@@ -106,19 +106,30 @@ export function PersonalAccountLayout({ userId }: IPersonaAccount) {
               userId={userId}
               handleClick={handleCreateClick}
             />
-            <SortAndSearch
-              setSort={setSort}
-              sort={sort}
-              options={sortOptions}
-              setSearch={setSearch}
-            />
-            <CollectionCardList
-              page={page}
-              handlePage={handlePage}
-              count={count}
-              data={collectionsData}
-            />
+            <Box>
+              <SortAndSearch
+                search={search}
+                setSort={setSort}
+                sort={sort}
+                options={sortOptions}
+                setSearch={setSearch}
+              />
+            </Box>
+            {isCollSuccess ? (
+              <CollectionCardList
+                page={page}
+                handlePage={handlePage}
+                count={count}
+                data={collectionsData}
+              />
+            ) : isCollectionLoading ? (
+              <Loader />
+            ) : (
+              <Typography>{t('error.wrong')}</Typography>
+            )}
           </Box>
+        ) : (
+          <Loader />
         )
       ) : (
         <Loader />
